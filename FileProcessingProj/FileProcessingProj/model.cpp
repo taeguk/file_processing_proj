@@ -1,7 +1,7 @@
 #include "model.h"
 
 
-namespace Model {
+namespace model {
 
 
 	/*

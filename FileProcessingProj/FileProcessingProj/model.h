@@ -2,9 +2,9 @@
 
 
 /*
-	Data Model에 관련된 것들을 담고 있는 namespace Model
+	Data Model에 관련된 것들을 담고 있다.
 */
-namespace Model {
+namespace model {
 
 
 	/*
