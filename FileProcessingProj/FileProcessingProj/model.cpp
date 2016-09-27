@@ -1,4 +1,5 @@
 #include "model.h"
+#include "helpers.h"
 
 
 namespace model {
@@ -35,12 +36,12 @@ namespace model {
 		return *this;
 	}
 
-	bool Member::operator==(const Member& m)
+	bool Member::operator==(const Member& m) const
 	{
 		return this->m_id == m.m_id;
 	}
 
-	bool Member::operator!=(const Member& m)
+	bool Member::operator!=(const Member& m) const
 	{
 		return !(*this == m);
 	}
@@ -52,8 +53,8 @@ namespace model {
 
 	Stock::Stock(
 		const std::string& id, const std::string& category,
-		const std::string& material, const std::string& price,
-		const std::string& stock, const std::string& washing_info,
+		const std::string& material, int price,
+		int stock, const std::string& washing_info,
 		const std::string& size
 		)
 		: m_id(id), m_category(category), m_material(material), m_price(price),
@@ -81,14 +82,29 @@ namespace model {
 		return *this;
 	}
 
-	bool Stock::operator==(const Stock& s)
+	bool Stock::operator==(const Stock& s) const
 	{
 		return m_id == s.m_id;
 	}
 
-	bool Stock::operator!=(const Stock& s)
+	bool Stock::operator!=(const Stock& s) const
 	{
 		return !(*this == s);
+	}
+
+	std::string Stock::formatted_price() const
+	{
+		std::string formatted_price;
+
+		int first_part = m_price / 1000;
+		int second_part = m_price % 1000;
+
+		if (first_part > 0)
+			formatted_price = helper::to_string(first_part) + ',';
+
+		formatted_price += helper::to_string(second_part, 3);
+
+		return formatted_price;
 	}
 
 
@@ -97,23 +113,23 @@ namespace model {
 	*/
 
 	Purchase::Purchase(
-		const std::string& purchase_id, const std::string& stock_id, 
-		const std::string& member_id, const std::string& quantity
+		const std::string& id, const std::string& stock_id, 
+		const std::string& member_id, int quantity
 		)
-		: m_purchase_id(purchase_id), m_stock_id(stock_id),
+		: m_id(id), m_stock_id(stock_id),
 		m_member_id(member_id), m_quantity(quantity)
 	{
 	}
 
 	Purchase::Purchase(const Purchase& p)
-		: m_purchase_id(p.m_purchase_id), m_stock_id(p.m_stock_id),
+		: m_id(p.m_id), m_stock_id(p.m_stock_id),
 		m_member_id(p.m_member_id), m_quantity(p.m_quantity)
 	{
 	}
 
 	Purchase& Purchase::operator=(const Purchase& p)
 	{
-		this->m_purchase_id = p.m_purchase_id;
+		this->m_id = p.m_id;
 		this->m_stock_id = p.m_stock_id;
 		this->m_member_id = p.m_member_id;
 		this->m_quantity = p.m_quantity;
@@ -121,12 +137,12 @@ namespace model {
 		return *this;
 	}
 
-	bool Purchase::operator==(const Purchase& p)
+	bool Purchase::operator==(const Purchase& p) const
 	{
-		return this->m_purchase_id == p.m_purchase_id;
+		return this->m_id == p.m_id;
 	}
 
-	bool Purchase::operator!=(const Purchase& p)
+	bool Purchase::operator!=(const Purchase& p) const
 	{
 		return !(*this == p);
 	}

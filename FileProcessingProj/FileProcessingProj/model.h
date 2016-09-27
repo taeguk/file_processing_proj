@@ -30,15 +30,15 @@ namespace model {
 			const std::string& birthday, const std::string& email);
 		Member(const Member&);
 		Member& operator=(const Member&);
-		bool operator==(const Member&);
-		bool operator!=(const Member&);
+		bool operator==(const Member&) const;
+		bool operator!=(const Member&) const;
 
-		inline std::string id();
-		inline std::string name();
-		inline std::string phone_number();
-		inline std::string address();
-		inline std::string birthday();
-		inline std::string email();
+		inline std::string id() const;
+		inline std::string name() const;
+		inline std::string phone_number() const;
+		inline std::string address() const;
+		inline std::string birthday() const;
+		inline std::string email() const;
 
 	private:
 		std::string m_id;
@@ -49,12 +49,12 @@ namespace model {
 		std::string m_email;
 	};
 
-	std::string Member::id() { return m_id; }
-	std::string Member::name() { return m_name; }
-	std::string Member::phone_number() { return m_phone_number; }
-	std::string Member::address() { return m_address; }
-	std::string Member::birthday() { return m_birthday; }
-	std::string Member::email() { return m_email; }
+	std::string Member::id() const { return m_id; }
+	std::string Member::name() const { return m_name; }
+	std::string Member::phone_number() const { return m_phone_number; }
+	std::string Member::address() const { return m_address; }
+	std::string Member::birthday() const { return m_birthday; }
+	std::string Member::email() const { return m_email; }
 
 
 	/*
@@ -63,39 +63,40 @@ namespace model {
 	class Stock {
 	public:
 		Stock(const std::string& id, const std::string& category, 
-			const std::string& material, const std::string& price,
-			const std::string& stock, const std::string& washing_info,
+			const std::string& material, int price,
+			int stock, const std::string& washing_info,
 			const std::string& size);
 		Stock(const Stock&);
 		Stock& operator=(const Stock&);
-		bool operator==(const Stock&);
-		bool operator!=(const Stock&);
+		bool operator==(const Stock&) const;
+		bool operator!=(const Stock&) const;
 
-		inline std::string id();
-		inline std::string category();
-		inline std::string material();
-		inline std::string price();
-		inline std::string stock();
-		inline std::string washing_info();
-		inline std::string size();
+		inline std::string id() const;
+		inline std::string category() const;
+		inline std::string material() const;
+		inline int price() const;
+		std::string formatted_price() const;
+		inline int stock() const;
+		inline std::string washing_info() const;
+		inline std::string size() const;
 
 	private:
 		std::string m_id;
 		std::string m_category;
 		std::string m_material;
-		std::string m_price;
-		std::string m_stock;
+		int m_price;
+		int m_stock;
 		std::string m_washing_info;
 		std::string m_size;
 	};
 	
-	std::string Stock::id() { return m_id; }
-	std::string Stock::category() { return m_category; }
-	std::string Stock::material() { return m_material; }
-	std::string Stock::price() { return m_price; }
-	std::string Stock::stock() { return m_stock; }
-	std::string Stock::washing_info() { return m_washing_info; }
-	std::string Stock::size() { return m_size; }
+	std::string Stock::id() const { return m_id; }
+	std::string Stock::category() const { return m_category; }
+	std::string Stock::material() const { return m_material; }
+	int Stock::price() const { return m_price; }
+	int Stock::stock() const { return m_stock; }
+	std::string Stock::washing_info() const { return m_washing_info; }
+	std::string Stock::size() const { return m_size; }
 
 
 	/*
@@ -103,28 +104,28 @@ namespace model {
 	*/
 	class Purchase {
 	public:
-		Purchase(const std::string& purchase_id, const std::string& stock_id,
-			const std::string& member_id, const std::string& quantity);
+		Purchase(const std::string& id, const std::string& stock_id,
+			const std::string& member_id, int quantity);
 		Purchase(const Purchase&);
 		Purchase& operator=(const Purchase&);
-		bool operator==(const Purchase&);
-		bool operator!=(const Purchase&);
+		bool operator==(const Purchase&) const;
+		bool operator!=(const Purchase&) const;
 
-		inline std::string purchase_id();
-		inline std::string stock_id();
-		inline std::string member_id();
-		inline std::string quantity();
+		inline std::string id() const;
+		inline std::string stock_id() const;
+		inline std::string member_id() const;
+		inline int quantity() const;
 
 	private:
-		std::string m_purchase_id;
+		std::string m_id;
 		std::string m_stock_id;
 		std::string m_member_id;
-		std::string m_quantity;
+		int m_quantity;
 	};
 
-	std::string Purchase::purchase_id() { return m_purchase_id; }
-	std::string Purchase::stock_id() { return m_stock_id; }
-	std::string Purchase::member_id() { return m_member_id; }
-	std::string Purchase::quantity() { return m_quantity; }
+	std::string Purchase::id() const { return m_id; }
+	std::string Purchase::stock_id() const { return m_stock_id; }
+	std::string Purchase::member_id() const { return m_member_id; }
+	int Purchase::quantity() const { return m_quantity; }
 
 }
