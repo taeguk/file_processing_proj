@@ -1,4 +1,5 @@
 #include <string>
+#include <iostream>
 
 
 /*
@@ -10,6 +11,10 @@ namespace model {
 	/*
 		각종 상수들
 	*/
+	const int MEMBER_FIELD_NUM = 6;
+	const int STOCK_FIELD_NUM = 7;
+	const int PURCHASE_FIELD_NUM = 4;
+
 	const int MEMBER_BIRTHDAY_LEN = 8;
 	const int STOCK_ID_LEN = 12;
 	const int STOCK_CATEGORY_LEN = 8;
@@ -25,6 +30,7 @@ namespace model {
 	*/
 	class Member {
 	public:
+		Member();
 		Member(const std::string& id, const std::string& name, 
 			const std::string& phone_number, const std::string& address, 
 			const std::string& birthday, const std::string& email);
@@ -40,6 +46,9 @@ namespace model {
 		inline std::string birthday() const;
 		inline std::string email() const;
 
+		friend std::istream& operator>> (std::istream&, Member&);
+		friend std::ostream& operator<< (std::ostream&, const Member&);
+
 	private:
 		std::string m_id;
 		std::string m_name;
@@ -48,6 +57,9 @@ namespace model {
 		std::string m_birthday;
 		std::string m_email;
 	};
+
+	std::istream& operator>> (std::istream&, Member&);
+	std::ostream& operator<< (std::ostream&, const Member&);
 
 	std::string Member::id() const { return m_id; }
 	std::string Member::name() const { return m_name; }
@@ -62,6 +74,7 @@ namespace model {
 	*/
 	class Stock {
 	public:
+		Stock();
 		Stock(const std::string& id, const std::string& category, 
 			const std::string& material, int price,
 			int stock, const std::string& washing_info,
@@ -80,6 +93,9 @@ namespace model {
 		inline std::string washing_info() const;
 		inline std::string size() const;
 
+		friend std::istream& operator>> (std::istream&, Stock&);
+		friend std::ostream& operator<< (std::ostream&, const Stock&);
+
 	private:
 		std::string m_id;
 		std::string m_category;
@@ -89,6 +105,9 @@ namespace model {
 		std::string m_washing_info;
 		std::string m_size;
 	};
+
+	std::istream& operator>> (std::istream&, Stock&);
+	std::ostream& operator<< (std::ostream&, const Stock&);
 	
 	std::string Stock::id() const { return m_id; }
 	std::string Stock::category() const { return m_category; }
@@ -104,6 +123,7 @@ namespace model {
 	*/
 	class Purchase {
 	public:
+		Purchase();
 		Purchase(const std::string& id, const std::string& stock_id,
 			const std::string& member_id, int quantity);
 		Purchase(const Purchase&);
@@ -116,12 +136,18 @@ namespace model {
 		inline std::string member_id() const;
 		inline int quantity() const;
 
+		friend std::istream& operator>> (std::istream&, Purchase&);
+		friend std::ostream& operator<< (std::ostream&, const Purchase&);
+
 	private:
 		std::string m_id;
 		std::string m_stock_id;
 		std::string m_member_id;
 		int m_quantity;
 	};
+
+	std::istream& operator>> (std::istream&, Purchase&);
+	std::ostream& operator<< (std::ostream&, const Purchase&);
 
 	std::string Purchase::id() const { return m_id; }
 	std::string Purchase::stock_id() const { return m_stock_id; }

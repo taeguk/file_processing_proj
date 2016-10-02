@@ -1,3 +1,4 @@
+#include <vector>
 #include "model.h"
 #include "helpers.h"
 
@@ -8,6 +9,8 @@ namespace model {
 	/*
 		Definitions of Member.
 	*/
+
+	Member::Member() {}
 
 	Member::Member(
 		const std::string& id, const std::string& name,
@@ -46,10 +49,54 @@ namespace model {
 		return !(*this == m);
 	}
 
+	std::istream & operator>>(std::istream& is, Member& m)
+	{
+		std::string line;
+
+		while (std::getline(is, line, '\n')) {
+			if (!line.empty())
+				break;
+		}
+
+		if (line.empty())
+		{
+			// something is wrong!
+			return is;
+		}
+
+		std::vector<std::string> tokens = helper::tokenize_string(line, '|');
+
+		if (tokens.size() != MEMBER_FIELD_NUM)
+		{
+			// something is wrong!
+			return is;
+		}
+			
+		m.m_id = tokens[0];
+		m.m_name = tokens[1];
+		m.m_phone_number = tokens[2];
+		m.m_address = tokens[3];
+		m.m_birthday = tokens[4];
+		m.m_email = tokens[5];
+
+		return is;
+	}
+
+	std::ostream& operator<< (std::ostream& os, const Member& m)
+	{
+		const std::string sep = ", ";
+		os << m.m_id << sep << m.m_name << sep << m.m_phone_number << sep
+			<< m.m_address << sep << m.m_birthday << sep << m.m_email << std::endl;
+
+		return os;
+	}
+
 	
 	/*
 		Definitions of Stock.
 	*/
+
+	Stock::Stock() {}
 
 	Stock::Stock(
 		const std::string& id, const std::string& category,
@@ -107,10 +154,56 @@ namespace model {
 		return formatted_price;
 	}
 
+	std::istream & operator>>(std::istream& is, Stock& s)
+	{
+		std::string line;
+
+		while (std::getline(is, line, '\n')) {
+			if (!line.empty())
+				break;
+		}
+
+		if (line.empty())
+		{
+			// something is wrong!
+			return is;
+		}
+
+		std::vector<std::string> tokens = helper::tokenize_string(line, '|');
+
+		if (tokens.size() != STOCK_FIELD_NUM)
+		{
+			// something is wrong!
+			return is;
+		}
+
+		s.m_id = tokens[0];
+		s.m_category = tokens[1];
+		s.m_material = tokens[2];
+		s.m_price = helper::to_int(tokens[3]);
+		s.m_stock = helper::to_int(tokens[4]);
+		s.m_washing_info = tokens[5];
+		s.m_size = tokens[6];
+
+		return is;
+	}
+
+	std::ostream& operator<< (std::ostream& os, const Stock& s)
+	{
+		const std::string sep = ", ";
+		os << s.m_id << sep << s.m_category << sep << s.m_material << sep
+			<< s.m_price << sep << s.m_stock << sep << s.m_washing_info << sep
+			<< s.m_size << std::endl;
+
+		return os;
+	}
+
 
 	/*
 		Definitions of Purchase.
 	*/
+
+	Purchase::Purchase() {}
 
 	Purchase::Purchase(
 		const std::string& id, const std::string& stock_id, 
@@ -147,4 +240,43 @@ namespace model {
 		return !(*this == p);
 	}
 
+	std::istream & operator>>(std::istream& is, Purchase& p)
+	{
+		std::string line;
+
+		while (std::getline(is, line, '\n')) {
+			if (!line.empty())
+				break;
+		}
+
+		if (line.empty())
+		{
+			// something is wrong!
+			return is;
+		}
+
+		std::vector<std::string> tokens = helper::tokenize_string(line, '|');
+
+		if (tokens.size() != PURCHASE_FIELD_NUM)
+		{
+			// something is wrong!
+			return is;
+		}
+
+		p.m_id = tokens[0];
+		p.m_stock_id = tokens[1];
+		p.m_member_id = tokens[2];
+		p.m_quantity = helper::to_int(tokens[3]);
+
+		return is;
+	}
+
+	std::ostream& operator<< (std::ostream& os, const Purchase& p)
+	{
+		const std::string sep = ", ";
+		os << p.m_id << sep << p.m_stock_id << sep
+			<< p.m_member_id << sep << p.m_quantity << std::endl;
+
+		return os;
+	}
 }
