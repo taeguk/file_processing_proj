@@ -42,7 +42,8 @@ namespace tool {
 		ofs_purchase.open(PURCHASE_LIST_FILE_NAME);
 
 		ofs_member << member_count << endl;
-		for (int i = 0; i < member_count; ++i) {
+		for (int i = 0; i < member_count; ++i) 
+		{
 			const Member& member = members[i];
 			ofs_member << member.id() << '|' << member.name() << '|'
 				<< member.phone_number() << '|' << member.address() << '|'
@@ -50,7 +51,8 @@ namespace tool {
 		}
 
 		ofs_stock << stock_count << endl;
-		for (int i = 0; i < stock_count; ++i) {
+		for (int i = 0; i < stock_count; ++i) 
+		{
 			const Stock& stock = stocks[i];
 			ofs_stock << stock.id() << '|' << stock.category() << '|'
 				<< stock.material() << '|' << stock.formatted_price() << '|'
@@ -59,7 +61,8 @@ namespace tool {
 		}
 
 		ofs_purchase << purchase_count << endl;
-		for (int i = 0; i < purchase_count; ++i) {
+		for (int i = 0; i < purchase_count; ++i) 
+		{
 			const Purchase& purchase = purchases[i];
 			ofs_purchase << purchase.id() << '|' << purchase.stock_id() << '|'
 				<< purchase.member_id() << '|' << purchase.quantity() << endl;
@@ -77,14 +80,17 @@ namespace tool {
 		int avail_name_cnt = static_cast<int>(max(member_count * 0.8, 1.0));
 		int avail_address_cnt = static_cast<int>(max(member_count * 0.3, 1.0));
 
-		for (int i = 0; i < avail_name_cnt; ++i) {
+		for (int i = 0; i < avail_name_cnt; ++i) 
+		{
 			avail_names.push_back("name_" + helper::to_string(i));
 		}
-		for (int i = 0; i < avail_address_cnt; ++i) {
+		for (int i = 0; i < avail_address_cnt; ++i) 
+		{
 			avail_addresses.push_back("address_" + helper::to_string(i));
 		}
 
-		for (int i = 0; i < member_count; ++i) {
+		for (int i = 0; i < member_count; ++i) 
+		{
 			string id, name, phone_number, address, birthday, email;
 
 			// Generate id
@@ -141,7 +147,8 @@ namespace tool {
 
 		vector<Stock> stocks;
 
-		for (int i = 0; i < stock_count; ++i) {
+		for (int i = 0; i < stock_count; ++i) 
+		{
 			string id, category, material, washing_info, size;
 			int price, stock_;
 
@@ -205,7 +212,8 @@ namespace tool {
 
 		vector<Purchase> purchases;
 
-		for (int i = 0; i < purchase_count; ++i) {
+		for (int i = 0; i < purchase_count; ++i) 
+		{
 			string id, stock_id, member_id;
 			int quantity;
 
