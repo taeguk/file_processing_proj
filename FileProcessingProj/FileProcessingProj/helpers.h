@@ -1,5 +1,6 @@
 #include <string>
 #include <sstream>
+#include <vector>
 
 
 /*
@@ -22,4 +23,8 @@ namespace helper {
 		ostr << number;
 		return ostr.str();
 	}
+
+	int to_int(std::string str);
+
+	std::vector<std::string> tokenize_string(std::string str, char denim);
 }
