@@ -13,7 +13,7 @@ namespace iobuffer
 	{
 	}
 
-	int BufferFile::Open(char * filename, int mode)
+	int BufferFile::Open(const char * filename, int mode)
 		// open an existing file and check the header
 		// a correct header must be on the file
 		// use ios::nocreate to ensure that a file exists
@@ -32,7 +32,7 @@ namespace iobuffer
 		return File.good();
 	}
 
-	int BufferFile::Create(char * filename, int mode)
+	int BufferFile::Create(const char * filename, int mode)
 		// create a new file and write a header on it.
 		// use ios::nocreate to ensure that no file exists
 	{

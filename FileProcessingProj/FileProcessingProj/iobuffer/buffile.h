@@ -31,8 +31,8 @@ namespace iobuffer
 	public:
 		BufferFile(IOBuffer &); // create with a buffer
 
-		int Open(char * filename, int MODE); // open an existing file
-		int Create(char * filename, int MODE); // create a new file
+		int Open(const char * filename, int MODE); // open an existing file
+		int Create(const char * filename, int MODE); // create a new file
 		int Close();
 		int Rewind(); // reset to the first data record
 		// Input and Output operations
