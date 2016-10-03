@@ -6,16 +6,28 @@ namespace helper
 {
 	int to_int(std::string str, const char* skip)
 	{
-		while (*skip)
+		std::string skipped_str;
+
+		for (int i = 0; i < str.length(); ++i) 
 		{
-			char skip_ch = *skip;
-			std::size_t idx;
-			while ((idx = str.find(skip_ch)) != std::string::npos)
-				str.erase(idx);
-			++skip;
+			bool is_skip = false;
+			const char* cur_skip = skip;
+
+			while (*cur_skip)
+			{
+				if (*cur_skip == str[i]) 
+				{
+					is_skip = true;
+					break;
+				}
+				++cur_skip;
+			}
+
+			if (!is_skip)
+				skipped_str += str[i];
 		}
 
-		return atoi(str.c_str());
+		return atoi(skipped_str.c_str());
 	}
 
 	std::vector<std::string> tokenize_string(std::string str, char denim)

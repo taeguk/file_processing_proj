@@ -62,10 +62,15 @@ namespace model {
 		int first_part = m_price / 1000;
 		int second_part = m_price % 1000;
 
-		if (first_part > 0)
-			formatted_price = helper::to_string(first_part) + ',';
-
-		formatted_price += helper::to_string(second_part, 3);
+		if (first_part > 0) 
+		{
+			formatted_price = helper::to_string(first_part) + ','
+				+ helper::to_string(second_part, 3);
+		}
+		else 
+		{
+			formatted_price = helper::to_string(second_part);
+		}
 
 		return formatted_price;
 	}
