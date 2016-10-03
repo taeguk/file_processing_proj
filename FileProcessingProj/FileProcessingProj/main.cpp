@@ -24,8 +24,8 @@ int main()
 		프로젝트에 필요한 데이터 파일들을 만든다.
 	*/
 
-	tool::generate_data_files(tool::MIN_MEMBER_COUNT, 
-		tool::MIN_STOCK_COUNT, tool::MIN_PURCHASE_COUNT);
+	file::generate_list_files(file::MIN_MEMBER_COUNT,
+		file::MIN_STOCK_COUNT, file::MIN_PURCHASE_COUNT);
 
 #else
 	std::cout << 'Nothing to do...' << std::endl;
