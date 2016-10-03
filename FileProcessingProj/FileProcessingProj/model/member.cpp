@@ -1,6 +1,6 @@
 #include <vector>
-#include "member.h"
-#include "helpers.h"
+#include <model/member.h>
+#include <helpers.h>
 
 
 namespace model {

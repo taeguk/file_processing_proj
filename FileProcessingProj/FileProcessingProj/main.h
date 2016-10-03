@@ -2,7 +2,7 @@
 #define MAIN_H
 
 #include <vector>
-#include "file.h"
+#include <file.h>
 
 
 //#define MODE GENERATION_OF_DATA_FILE

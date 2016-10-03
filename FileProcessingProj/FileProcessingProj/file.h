@@ -4,9 +4,9 @@
 #include <string>
 #include <algorithm>
 #include <cassert>
-#include "model.h"
-#include "iobuffer/delim.h"
-#include "iobuffer/recfile.h"
+#include <model/model.h>
+#include <iobuffer/delim.h>
+#include <iobuffer/recfile.h>
 
 
 /*

@@ -51,16 +51,16 @@
     <ClInclude Include="iobuffer\varlen.h">
       <Filter>헤더 파일\iobuffer</Filter>
     </ClInclude>
-    <ClInclude Include="member.h">
+    <ClInclude Include="model\member.h">
       <Filter>헤더 파일\model</Filter>
     </ClInclude>
-    <ClInclude Include="stock.h">
+    <ClInclude Include="model\model.h">
       <Filter>헤더 파일\model</Filter>
     </ClInclude>
-    <ClInclude Include="purchase.h">
+    <ClInclude Include="model\purchase.h">
       <Filter>헤더 파일\model</Filter>
     </ClInclude>
-    <ClInclude Include="model.h">
+    <ClInclude Include="model\stock.h">
       <Filter>헤더 파일\model</Filter>
     </ClInclude>
   </ItemGroup>
@@ -86,13 +86,13 @@
     <ClCompile Include="file.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="member.cpp">
+    <ClCompile Include="model\member.cpp">
       <Filter>소스 파일\model</Filter>
     </ClCompile>
-    <ClCompile Include="purchase.cpp">
+    <ClCompile Include="model\purchase.cpp">
       <Filter>소스 파일\model</Filter>
     </ClCompile>
-    <ClCompile Include="stock.cpp">
+    <ClCompile Include="model\stock.cpp">
       <Filter>소스 파일\model</Filter>
     </ClCompile>
   </ItemGroup>

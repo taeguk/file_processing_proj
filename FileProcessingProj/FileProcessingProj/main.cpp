@@ -1,6 +1,5 @@
-#include "main.h"
 #include <cstdlib>
-
+#include <main.h>
 
 int main() 
 {

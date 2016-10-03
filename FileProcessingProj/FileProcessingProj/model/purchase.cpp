@@ -1,7 +1,8 @@
 #include <vector>
-#include "purchase.h"
-#include "stock.h"
-#include "helpers.h"
+#include <model/purchase.h>
+#include <model/stock.h>
+#include <helpers.h>
+
 
 
 namespace model {

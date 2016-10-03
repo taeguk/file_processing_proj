@@ -7,9 +7,9 @@
 */
 
 
-#include "member.h"
-#include "stock.h"
-#include "purchase.h"
+#include <model/member.h>
+#include <model/stock.h>
+#include <model/purchase.h>
 
 
 namespace model

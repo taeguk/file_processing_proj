@@ -71,12 +71,14 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(MSBuildProjectDirectory);$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(MSBuildProjectDirectory);$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -149,9 +151,9 @@
     <ClCompile Include="iobuffer\iobuffer.cpp" />
     <ClCompile Include="iobuffer\varlen.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="member.cpp" />
-    <ClCompile Include="purchase.cpp" />
-    <ClCompile Include="stock.cpp" />
+    <ClCompile Include="model\member.cpp" />
+    <ClCompile Include="model\purchase.cpp" />
+    <ClCompile Include="model\stock.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="file.h" />
@@ -162,10 +164,10 @@
     <ClInclude Include="iobuffer\recfile.h" />
     <ClInclude Include="iobuffer\varlen.h" />
     <ClInclude Include="main.h" />
-    <ClInclude Include="member.h" />
-    <ClInclude Include="model.h" />
-    <ClInclude Include="purchase.h" />
-    <ClInclude Include="stock.h" />
+    <ClInclude Include="model\member.h" />
+    <ClInclude Include="model\model.h" />
+    <ClInclude Include="model\purchase.h" />
+    <ClInclude Include="model\stock.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

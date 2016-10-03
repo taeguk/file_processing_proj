@@ -5,9 +5,9 @@
 #include <cassert>
 #include <cstdlib>
 #include <ctime>
-#include "file.h"
-#include "model.h"
-#include "helpers.h"
+#include <file.h>
+#include <model/model.h>
+#include <helpers.h>
 
 using namespace std;
 using namespace model;
