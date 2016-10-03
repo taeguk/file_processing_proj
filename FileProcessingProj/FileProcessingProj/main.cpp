@@ -1,4 +1,5 @@
 #include "main.h"
+#include <cstdlib>
 
 
 int main() 
@@ -9,15 +10,7 @@ int main()
 		정상적인 프로그램 시작.
 	*/
 
-	show_member();
-	show_stock();
-	show_purchase();
-
-	std::cout << "*************************" << std::endl;
-
-	member_test();
-	stock_test();
-	purchase_test();
+	prompt();
 
 #elif MODE == GENERATION_OF_DATA_FILE
 	/*
@@ -31,6 +24,86 @@ int main()
 	std::cout << 'Nothing to do...' << std::endl;
 
 #endif
+}
+
+void clear_console()
+{
+#ifdef _WIN32
+	system("cls");
+#elif defined __unix__
+	system("clear");
+#else
+	// Print some new lines instead of clearing console.
+	std::cout << std::endl << std::endl << std::endl << std::endl;
+#endif
+}
+
+void show_menu()
+{
+	std::cout << "====================================" << std::endl;
+	std::cout << "     File Processing Project #1     " << std::endl;
+	std::cout << "                     made by taeguk " << std::endl;
+	std::cout << "====================================" << std::endl;
+	std::cout << "           < Select Menu >          " << std::endl;
+	std::cout << " 1. showMember                      " << std::endl;
+	std::cout << " 2. showStock                       " << std::endl;
+	std::cout << " 3. showPurchase                    " << std::endl;
+	std::cout << " 4. MemberTest                      " << std::endl;
+	std::cout << " 5. StockTest                       " << std::endl;
+	std::cout << " 6. PurchaseTest                    " << std::endl;
+	std::cout << " 7. OnlineShoppingSystem            " << std::endl;
+	std::cout << " 8. EXIT                            " << std::endl;
+	std::cout << "====================================" << std::endl;
+}
+
+void prompt()
+{
+	bool exit_flag = false;
+
+	while (!exit_flag)
+	{
+		int sel;
+		show_menu();
+		std::cout << "Your Select >> ";
+		std::cin >> sel;
+		std::cin.get();		// for '\n'
+
+		switch (sel)
+		{
+		case 1:
+			show_member();
+			break;
+		case 2:
+			show_stock();
+			break;
+		case 3:
+			show_purchase();
+			break;
+		case 4:
+			member_test();
+			break;
+		case 5:
+			stock_test();
+			break;
+		case 6:
+			purchase_test();
+			break;
+		case 7:
+			std::cout << "Sorry, not implemented..." << std::endl;
+			break;
+		case 8:
+			exit_flag = true;
+			break;
+		default:
+			std::cout << "Please, input correct number." << std::endl;
+		}
+
+		std::cout << std::endl;
+		std::cout << "If you wanna continue, please press 'ENTER'...";
+		std::cin.get();
+
+		clear_console();
+	}
 }
 
 void show_member()
