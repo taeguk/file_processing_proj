@@ -19,6 +19,12 @@
     <Filter Include="헤더 파일\iobuffer">
       <UniqueIdentifier>{082420a5-a4cb-44b6-bcfd-62b9a0e1bfda}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\model">
+      <UniqueIdentifier>{dd7f71da-3e81-4284-a712-5ce87ef87a79}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\model">
+      <UniqueIdentifier>{5becf159-310a-4c80-acb7-ff3617a84ff6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="file.h">
@@ -28,9 +34,6 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="main.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="model.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="iobuffer\delim.h">
@@ -48,11 +51,20 @@
     <ClInclude Include="iobuffer\varlen.h">
       <Filter>헤더 파일\iobuffer</Filter>
     </ClInclude>
+    <ClInclude Include="member.h">
+      <Filter>헤더 파일\model</Filter>
+    </ClInclude>
+    <ClInclude Include="stock.h">
+      <Filter>헤더 파일\model</Filter>
+    </ClInclude>
+    <ClInclude Include="purchase.h">
+      <Filter>헤더 파일\model</Filter>
+    </ClInclude>
+    <ClInclude Include="model.h">
+      <Filter>헤더 파일\model</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="model.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -73,6 +85,15 @@
     </ClCompile>
     <ClCompile Include="file.cpp">
       <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="member.cpp">
+      <Filter>소스 파일\model</Filter>
+    </ClCompile>
+    <ClCompile Include="purchase.cpp">
+      <Filter>소스 파일\model</Filter>
+    </ClCompile>
+    <ClCompile Include="stock.cpp">
+      <Filter>소스 파일\model</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

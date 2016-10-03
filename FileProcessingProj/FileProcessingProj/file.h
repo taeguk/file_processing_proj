@@ -116,7 +116,7 @@ namespace file {
 	template <class DataType>
 	void write_data_file(const std::vector<DataType>& data_list)
 	{
-		iobuffer::DelimFieldBuffer buffer('|', model::MAX_IOBUFFER_SIZE);
+		iobuffer::DelimFieldBuffer buffer('|', iobuffer::MAX_IOBUFFER_SIZE);
 		iobuffer::RecordFile<DataType> recode_file(buffer);
 
 		recode_file.Create(get_data_file_name<DataType>().c_str(),
@@ -141,7 +141,7 @@ namespace file {
 	template <class DataType>
 	std::vector<DataType> read_data_file(int count = -1)
 	{
-		iobuffer::DelimFieldBuffer buffer('|', model::MAX_IOBUFFER_SIZE);
+		iobuffer::DelimFieldBuffer buffer('|', iobuffer::MAX_IOBUFFER_SIZE);
 		iobuffer::RecordFile<DataType> recode_file(buffer);
 		std::vector<DataType> data_list;
 

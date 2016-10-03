@@ -149,7 +149,9 @@
     <ClCompile Include="iobuffer\iobuffer.cpp" />
     <ClCompile Include="iobuffer\varlen.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="model.cpp" />
+    <ClCompile Include="member.cpp" />
+    <ClCompile Include="purchase.cpp" />
+    <ClCompile Include="stock.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="file.h" />
@@ -160,7 +162,10 @@
     <ClInclude Include="iobuffer\recfile.h" />
     <ClInclude Include="iobuffer\varlen.h" />
     <ClInclude Include="main.h" />
+    <ClInclude Include="member.h" />
     <ClInclude Include="model.h" />
+    <ClInclude Include="purchase.h" />
+    <ClInclude Include="stock.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

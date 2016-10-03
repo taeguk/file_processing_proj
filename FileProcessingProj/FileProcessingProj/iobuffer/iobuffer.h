@@ -11,6 +11,7 @@
 
 namespace iobuffer
 {
+	const int MAX_IOBUFFER_SIZE = 1024;
 
 	class IOBuffer
 		// An abstract base class for file buffers
