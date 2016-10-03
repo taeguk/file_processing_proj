@@ -5,7 +5,7 @@
 #include <cassert>
 #include <cstdlib>
 #include <ctime>
-#include "datafile.h"
+#include "file.h"
 #include "model.h"
 #include "helpers.h"
 
@@ -13,7 +13,7 @@ using namespace std;
 using namespace model;
 
 
-namespace tool {
+namespace file {
 
 
 	/*
@@ -25,7 +25,7 @@ namespace tool {
 		const vector<Member>& members, const vector<Stock>& stocks);
 
 
-	void generate_data_files(int member_count, int stock_count, int purchase_count)
+	void generate_list_files(int member_count, int stock_count, int purchase_count)
 	{
 		srand(static_cast<unsigned int>(time(NULL)));
 
@@ -233,5 +233,51 @@ namespace tool {
 		}
 
 		return purchases;
+	}
+
+
+	/*
+		모델 타입으로 부터 리스트 파일 이름을 가져오는 함수 템플릿의 특수화 버전
+	*/
+
+	template <>
+	std::string get_list_file_name<model::Member>()
+	{
+		return MEMBER_LIST_FILE_NAME;
+	}
+
+	template <>
+	std::string get_list_file_name<model::Stock>()
+	{
+		return STOCK_LIST_FILE_NAME;
+	}
+
+	template <>
+	std::string get_list_file_name<model::Purchase>()
+	{
+		return PURCHASE_LIST_FILE_NAME;
+	}
+
+
+	/*
+		모델 타입으로 부터 데이터 파일 이름을 가져오는 함수 템플릿의 특수화 버전
+	*/
+
+	template <>
+	std::string get_data_file_name<model::Member>()
+	{
+		return MEMBER_DATA_FILE_NAME;
+	}
+
+	template <>
+	std::string get_data_file_name<model::Stock>()
+	{
+		return STOCK_DATA_FILE_NAME;
+	}
+
+	template <>
+	std::string get_data_file_name<model::Purchase>()
+	{
+		return PURCHASE_DATA_FILE_NAME;
 	}
 }

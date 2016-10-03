@@ -142,9 +142,24 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="file.cpp" />
+    <ClCompile Include="helpers.cpp" />
+    <ClCompile Include="iobuffer\buffile.cpp" />
+    <ClCompile Include="iobuffer\delim.cpp" />
+    <ClCompile Include="iobuffer\iobuffer.cpp" />
+    <ClCompile Include="iobuffer\varlen.cpp" />
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="model.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="file.h" />
+    <ClInclude Include="helpers.h" />
+    <ClInclude Include="iobuffer\buffile.h" />
+    <ClInclude Include="iobuffer\delim.h" />
+    <ClInclude Include="iobuffer\iobuffer.h" />
+    <ClInclude Include="iobuffer\recfile.h" />
+    <ClInclude Include="iobuffer\varlen.h" />
+    <ClInclude Include="main.h" />
     <ClInclude Include="model.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

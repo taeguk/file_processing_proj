@@ -1,3 +1,6 @@
+#ifndef HELPERS_H
+#define HELPERS_H
+
 #include <string>
 #include <sstream>
 #include <vector>
@@ -13,7 +16,7 @@
 namespace helper {
 	
 	// C++11의 to_string 대체용도.
-	template <typename T>
+	template <class T>
 	std::string to_string(T number, int width = 0)
 	{
 		std::ostringstream ostr;
@@ -24,7 +27,9 @@ namespace helper {
 		return ostr.str();
 	}
 
-	int to_int(std::string str);
+	int to_int(std::string str, const char* skip = "");
 
 	std::vector<std::string> tokenize_string(std::string str, char denim);
 }
+
+#endif

@@ -1,5 +1,10 @@
+#ifndef MODEL_H
+#define MODEL_H
+
+
 #include <string>
 #include <iostream>
+#include "iobuffer/iobuffer.h"
 
 
 /*
@@ -11,6 +16,8 @@ namespace model {
 	/*
 		각종 상수들
 	*/
+	const int MAX_IOBUFFER_SIZE = 1024;
+
 	const int MEMBER_FIELD_NUM = 6;
 	const int STOCK_FIELD_NUM = 7;
 	const int PURCHASE_FIELD_NUM = 4;
@@ -48,6 +55,10 @@ namespace model {
 
 		friend std::istream& operator>> (std::istream&, Member&);
 		friend std::ostream& operator<< (std::ostream&, const Member&);
+
+		// member functions related to iobuffer.
+		int Pack(iobuffer::IOBuffer&) const;
+		int Unpack(iobuffer::IOBuffer&);
 
 	private:
 		std::string m_id;
@@ -96,6 +107,10 @@ namespace model {
 		friend std::istream& operator>> (std::istream&, Stock&);
 		friend std::ostream& operator<< (std::ostream&, const Stock&);
 
+		// member functions related to iobuffer.
+		int Pack(iobuffer::IOBuffer&) const;
+		int Unpack(iobuffer::IOBuffer&);
+
 	private:
 		std::string m_id;
 		std::string m_category;
@@ -139,6 +154,10 @@ namespace model {
 		friend std::istream& operator>> (std::istream&, Purchase&);
 		friend std::ostream& operator<< (std::ostream&, const Purchase&);
 
+		// member functions related to iobuffer.
+		int Pack(iobuffer::IOBuffer&) const;
+		int Unpack(iobuffer::IOBuffer&);
+
 	private:
 		std::string m_id;
 		std::string m_stock_id;
@@ -155,3 +174,5 @@ namespace model {
 	int Purchase::quantity() const { return m_quantity; }
 
 }
+
+#endif

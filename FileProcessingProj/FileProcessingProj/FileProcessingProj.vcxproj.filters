@@ -13,14 +13,62 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="소스 파일\iobuffer">
+      <UniqueIdentifier>{ff9338ed-6582-4236-8f12-d16187b686d7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="model.h">
       <Filter>소스 파일</Filter>
     </ClInclude>
+    <ClInclude Include="helpers.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="main.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="iobuffer\buffile.h">
+      <Filter>소스 파일\iobuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="iobuffer\delim.h">
+      <Filter>소스 파일\iobuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="iobuffer\iobuffer.h">
+      <Filter>소스 파일\iobuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="iobuffer\recfile.h">
+      <Filter>소스 파일\iobuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="iobuffer\varlen.h">
+      <Filter>소스 파일\iobuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="file.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="model.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="helpers.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="iobuffer\buffile.cpp">
+      <Filter>소스 파일\iobuffer</Filter>
+    </ClCompile>
+    <ClCompile Include="iobuffer\delim.cpp">
+      <Filter>소스 파일\iobuffer</Filter>
+    </ClCompile>
+    <ClCompile Include="iobuffer\iobuffer.cpp">
+      <Filter>소스 파일\iobuffer</Filter>
+    </ClCompile>
+    <ClCompile Include="iobuffer\varlen.cpp">
+      <Filter>소스 파일\iobuffer</Filter>
+    </ClCompile>
+    <ClCompile Include="file.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

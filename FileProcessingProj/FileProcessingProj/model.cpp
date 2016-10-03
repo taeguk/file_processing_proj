@@ -1,6 +1,7 @@
 #include <vector>
 #include "model.h"
 #include "helpers.h"
+#include "iobuffer/recfile.h"
 
 
 namespace model {
@@ -89,6 +90,65 @@ namespace model {
 			<< m.m_address << sep << m.m_birthday << sep << m.m_email << std::endl;
 
 		return os;
+	}
+
+	int Member::Pack(iobuffer::IOBuffer& buffer) const
+	{
+		int numBytes;
+
+		buffer.Clear();
+
+		numBytes = buffer.Pack(m_id.c_str());
+		if (numBytes == -1) return FALSE;
+
+		numBytes = buffer.Pack(m_name.c_str());
+		if (numBytes == -1) return FALSE;
+
+		numBytes = buffer.Pack(m_phone_number.c_str());
+		if (numBytes == -1) return FALSE;
+
+		numBytes = buffer.Pack(m_address.c_str());
+		if (numBytes == -1) return FALSE;
+
+		numBytes = buffer.Pack(m_birthday.c_str());
+		if (numBytes == -1) return FALSE;
+
+		numBytes = buffer.Pack(m_email.c_str());
+		if (numBytes == -1) return FALSE;
+
+		return TRUE;
+	}
+
+	int Member::Unpack(iobuffer::IOBuffer& buffer)
+	{
+		int numBytes;
+		char buf[MAX_IOBUFFER_SIZE];
+
+		numBytes = buffer.Unpack(buf, MAX_IOBUFFER_SIZE);
+		if (numBytes == -1) return FALSE;
+		m_id = std::string(buf, numBytes);
+
+		numBytes = buffer.Unpack(buf, MAX_IOBUFFER_SIZE);
+		if (numBytes == -1) return FALSE;
+		m_name = std::string(buf, numBytes);
+
+		numBytes = buffer.Unpack(buf, MAX_IOBUFFER_SIZE);
+		if (numBytes == -1) return FALSE;
+		m_phone_number = std::string(buf, numBytes);
+
+		numBytes = buffer.Unpack(buf, MAX_IOBUFFER_SIZE);
+		if (numBytes == -1) return FALSE;
+		m_address = std::string(buf, numBytes);
+
+		numBytes = buffer.Unpack(buf, MEMBER_BIRTHDAY_LEN);
+		if (numBytes == -1) return FALSE;
+		m_birthday = std::string(buf, numBytes);
+
+		numBytes = buffer.Unpack(buf, MAX_IOBUFFER_SIZE);
+		if (numBytes == -1) return FALSE;
+		m_email = std::string(buf, numBytes);
+
+		return TRUE;
 	}
 
 	
@@ -180,7 +240,7 @@ namespace model {
 		s.m_id = tokens[0];
 		s.m_category = tokens[1];
 		s.m_material = tokens[2];
-		s.m_price = helper::to_int(tokens[3]);
+		s.m_price = helper::to_int(tokens[3], ",");
 		s.m_stock = helper::to_int(tokens[4]);
 		s.m_washing_info = tokens[5];
 		s.m_size = tokens[6];
@@ -192,10 +252,80 @@ namespace model {
 	{
 		const std::string sep = ", ";
 		os << s.m_id << sep << s.m_category << sep << s.m_material << sep
-			<< s.m_price << sep << s.m_stock << sep << s.m_washing_info << sep
+			<< s.formatted_price() << sep << s.m_stock << sep << s.m_washing_info << sep
 			<< s.m_size << std::endl;
 
 		return os;
+	}
+
+	int Stock::Pack(iobuffer::IOBuffer& buffer) const
+	{
+		int numBytes;
+
+		buffer.Clear();
+
+		numBytes = buffer.Pack(m_id.c_str());
+		if (numBytes == -1) return FALSE;
+
+		numBytes = buffer.Pack(m_category.c_str());
+		if (numBytes == -1) return FALSE;
+
+		numBytes = buffer.Pack(m_material.c_str());
+		if (numBytes == -1) return FALSE;
+
+		std::string price = formatted_price();
+		numBytes = buffer.Pack(price.c_str());
+		if (numBytes == -1) return FALSE;
+
+		std::string stock = helper::to_string(m_stock);
+		numBytes = buffer.Pack(stock.c_str());
+		if (numBytes == -1) return FALSE;
+
+		numBytes = buffer.Pack(m_washing_info.c_str());
+		if (numBytes == -1) return FALSE;
+
+		numBytes = buffer.Pack(m_size.c_str());
+		if (numBytes == -1) return FALSE;
+
+		return TRUE;
+	}
+
+	int Stock::Unpack(iobuffer::IOBuffer& buffer)
+	{
+		int numBytes;
+		char buf[MAX_IOBUFFER_SIZE];
+
+		numBytes = buffer.Unpack(buf, STOCK_ID_LEN);
+		if (numBytes == -1) return FALSE;
+		m_id = std::string(buf, numBytes);
+
+		numBytes = buffer.Unpack(buf, STOCK_CATEGORY_LEN);
+		if (numBytes == -1) return FALSE;
+		m_category = std::string(buf, numBytes);
+
+		numBytes = buffer.Unpack(buf, MAX_IOBUFFER_SIZE);
+		if (numBytes == -1) return FALSE;
+		m_material = std::string(buf, numBytes);
+
+		numBytes = buffer.Unpack(buf, STOCK_PRICE_LEN);
+		if (numBytes == -1) return FALSE;
+		std::string price = std::string(buf, numBytes);
+		m_price = helper::to_int(price, ",");
+
+		numBytes = buffer.Unpack(buf, STOCK_STOCK_LEN);
+		if (numBytes == -1) return FALSE;
+		std::string stock = std::string(buf, numBytes);
+		m_stock = helper::to_int(stock);
+
+		numBytes = buffer.Unpack(buf, MAX_IOBUFFER_SIZE);
+		if (numBytes == -1) return FALSE;
+		m_washing_info = std::string(buf, numBytes);
+
+		numBytes = buffer.Unpack(buf, STOCK_SIZE_LEN);
+		if (numBytes == -1) return FALSE;
+		m_size = std::string(buf, numBytes);
+
+		return TRUE;
 	}
 
 
@@ -278,5 +408,52 @@ namespace model {
 			<< p.m_member_id << sep << p.m_quantity << std::endl;
 
 		return os;
+	}
+
+	int Purchase::Pack(iobuffer::IOBuffer& buffer) const
+	{
+		int numBytes;
+
+		buffer.Clear();
+
+		numBytes = buffer.Pack(m_id.c_str());
+		if (numBytes == -1) return FALSE;
+
+		numBytes = buffer.Pack(m_stock_id.c_str());
+		if (numBytes == -1) return FALSE;
+
+		numBytes = buffer.Pack(m_member_id.c_str());
+		if (numBytes == -1) return FALSE;
+
+		std::string quantity = helper::to_string(m_quantity);
+		numBytes = buffer.Pack(quantity.c_str());
+		if (numBytes == -1) return FALSE;
+
+		return TRUE;
+	}
+
+	int Purchase::Unpack(iobuffer::IOBuffer& buffer)
+	{
+		int numBytes;
+		char buf[MAX_IOBUFFER_SIZE];
+
+		numBytes = buffer.Unpack(buf, PURCHASE_ID_LEN);
+		if (numBytes == -1) return FALSE;
+		m_id = std::string(buf, numBytes);
+
+		numBytes = buffer.Unpack(buf, STOCK_ID_LEN);
+		if (numBytes == -1) return FALSE;
+		m_stock_id = std::string(buf, numBytes);
+
+		numBytes = buffer.Unpack(buf, MAX_IOBUFFER_SIZE);
+		if (numBytes == -1) return FALSE;
+		m_member_id = std::string(buf, numBytes);
+
+		numBytes = buffer.Unpack(buf, PURCHASE_QUANTITY_LEN);
+		if (numBytes == -1) return FALSE;
+		std::string quantity = std::string(buf, numBytes);
+		m_quantity = helper::to_int(quantity);
+
+		return TRUE;
 	}
 }

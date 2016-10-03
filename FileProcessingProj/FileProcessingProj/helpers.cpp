@@ -4,8 +4,17 @@
 
 namespace helper
 {
-	int to_int(std::string str)
+	int to_int(std::string str, const char* skip)
 	{
+		while (*skip)
+		{
+			char skip_ch = *skip;
+			std::size_t idx;
+			while ((idx = str.find(skip_ch)) != std::string::npos)
+				str.erase(idx);
+			++skip;
+		}
+
 		return atoi(str.c_str());
 	}
 
