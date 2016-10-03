@@ -16,34 +16,37 @@
     <Filter Include="소스 파일\iobuffer">
       <UniqueIdentifier>{ff9338ed-6582-4236-8f12-d16187b686d7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="헤더 파일\iobuffer">
+      <UniqueIdentifier>{082420a5-a4cb-44b6-bcfd-62b9a0e1bfda}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="model.h">
-      <Filter>소스 파일</Filter>
+    <ClInclude Include="file.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="helpers.h">
-      <Filter>소스 파일</Filter>
+      <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="main.h">
-      <Filter>소스 파일</Filter>
+      <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="iobuffer\buffile.h">
-      <Filter>소스 파일\iobuffer</Filter>
+    <ClInclude Include="model.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="iobuffer\delim.h">
-      <Filter>소스 파일\iobuffer</Filter>
+      <Filter>헤더 파일\iobuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="iobuffer\buffile.h">
+      <Filter>헤더 파일\iobuffer</Filter>
     </ClInclude>
     <ClInclude Include="iobuffer\iobuffer.h">
-      <Filter>소스 파일\iobuffer</Filter>
+      <Filter>헤더 파일\iobuffer</Filter>
     </ClInclude>
     <ClInclude Include="iobuffer\recfile.h">
-      <Filter>소스 파일\iobuffer</Filter>
+      <Filter>헤더 파일\iobuffer</Filter>
     </ClInclude>
     <ClInclude Include="iobuffer\varlen.h">
-      <Filter>소스 파일\iobuffer</Filter>
-    </ClInclude>
-    <ClInclude Include="file.h">
-      <Filter>소스 파일</Filter>
+      <Filter>헤더 파일\iobuffer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
