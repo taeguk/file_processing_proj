@@ -1,6 +1,8 @@
 #include <cstdlib>
 #include <main.h>
 #include <helpers.h>
+#include <shopping.h>
+
 
 int main() 
 {
@@ -77,7 +79,7 @@ void prompt()
 			purchase_test();
 			break;
 		case 7:
-			std::cout << "Sorry, not implemented..." << std::endl;
+			shopping::online_shopping_system();
 			break;
 		case 8:
 			exit_flag = true;

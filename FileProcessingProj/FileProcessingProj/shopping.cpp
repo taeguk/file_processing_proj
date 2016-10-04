@@ -7,6 +7,9 @@
 
 namespace shopping
 {
+	using model::ModelKind;
+
+
 	void online_shopping_system()
 	{
 		prompt();
@@ -29,6 +32,8 @@ namespace shopping
 	void prompt()
 	{
 		bool exit_flag = false;
+
+		helper::clear_console();
 
 		while (!exit_flag)
 		{
@@ -92,7 +97,7 @@ namespace shopping
 		}
 
 		std::cout << "====================================" << std::endl;
-		std::cout << title;
+		std::cout << title << std::endl;
 		std::cout << "====================================" << std::endl;
 		std::cout << " 1. Member                          " << std::endl;
 		std::cout << " 2. Stock                           " << std::endl;
@@ -111,52 +116,109 @@ namespace shopping
 		case SubMenu::STOCK:
 		case SubMenu::PURCHASE:
 			return static_cast<SubMenu>(sel);
-		case SubMenu::EXIT:
-			return SubMenu::EXIT;
+		case SubMenu::SUB_EXIT:
+			return SubMenu::SUB_EXIT;
 		default:
 			return SubMenu::INVALID;
 		}
 	}
 
-	bool prompt_id(SubMenu sub_menu, std::string& kind, std::string& id)
+	bool prompt_id(SubMenu sub_menu, ModelKind& kind, std::string& id, bool is_search)
 	{
+		std::string str_kind;
+
 		switch (sub_menu)
 		{
 		case SubMenu::MEMBER:
 			std::cout << "Input Member ID >> ";
 			std::cin >> id;
-			kind = "member";
+			kind = ModelKind::MEMBER;
 			break;
 		case SubMenu::STOCK:
 			std::cout << "Input Stock ID >> ";
 			std::cin >> id;
-			kind = "stock";
+			kind = ModelKind::STOCK;
 			break;
 		case SubMenu::PURCHASE:
-			std::cout << "What kind of ID do you want? (Purchase, Member, Stock) >> ";
-			std::cin >> kind;
-			std::transform(kind.begin(), kind.end(), kind.begin(), ::tolower);
-			if (kind != "member" && kind != "stock" && kind != "purchase") {
-				std::cout << kind << " is invalid kind!" << std::endl;
-				return false;
+			if (is_search) {
+				std::cout << "What kind of ID do you want? (Purchase, Member, Stock) >> ";
+				std::cin >> str_kind;
+				std::transform(str_kind.begin(), str_kind.end(), str_kind.begin(), ::tolower);
+				if (str_kind == "purchase")
+					kind = ModelKind::PURCHASE;
+				else if (str_kind == "member")
+					kind = ModelKind::MEMBER;
+				else if (str_kind == "stock")
+					kind = ModelKind::STOCK;
+				else {
+					std::cout << str_kind << " is invalid kind!" << std::endl;
+					return false;
+				}
 			}
-			std::cout << "Input " << kind << " ID >> ";
+			else {
+				str_kind = "purchase";
+				kind = ModelKind::PURCHASE;
+			}
+			std::cout << "Input " << str_kind << " ID >> ";
 			std::cin >> id;
 			break;
 		default:
 			return false;
 		}
 		
+		std::cin.get();
+		return true;
+	}
+
+	bool prompt_reg(SubMenu sub_menu, std::string& reg_info, bool is_update)
+	{
+		switch (sub_menu)
+		{
+		case SubMenu::MEMBER:
+			std::cout << "<< Input Member Info >>" << std::endl;
+			if (is_update) {
+				std::cout << "* Without ID Please.. *" << std::endl;
+				std::cout << "Example) name_471|01788738298|address_54|20020821|username_0@sogang.ac.kr" << std::endl;
+			}
+			else
+				std::cout << "Example) member_id_0|name_471|01788738298|address_54|20020821|username_0@sogang.ac.kr" << std::endl;
+			break;
+		case SubMenu::STOCK:
+			std::cout << "<< Input Stock Info >>" << std::endl;
+			if (is_update) {
+				std::cout << "* Without ID Please.. *" << std::endl;
+				std::cout << "Example) Shirts|Diamond|16,308|4175|Dry Cleaning|XL" << std::endl;
+			}
+			else
+				std::cout << "Example) 000000000000|Shirts|Diamond|16,308|4175|Dry Cleaning|XL" << std::endl;
+			break;
+		case SubMenu::PURCHASE:
+			std::cout << "<< Input Purchase Info >>" << std::endl;
+			if (is_update) {
+				std::cout << "* Without ID Please.. *" << std::endl;
+				std::cout << "Example) 000000015300|member_id_426|57" << std::endl;
+			}
+			else
+				std::cout << "Example) 0000000000000000|000000015300|member_id_426|57" << std::endl;
+			break;
+		default:
+			return false;
+		}
+
+		std::cin >> reg_info;
+		std::cin.get();
 		return true;
 	}
 
 	void menu_search()
 	{
 		SubMenu sub_menu = sub_prompt(Menu::SEARCH);
-		std::string kind, id;
+		ModelKind kind;
+		std::string id;
 
-		if (!prompt_id(sub_menu, kind, id))
+		if (!prompt_id(sub_menu, kind, id, true))
 			return;
+
 		try {
 			switch (sub_menu)
 			{
@@ -174,8 +236,10 @@ namespace shopping
 			break;
 			case SubMenu::PURCHASE:
 			{
-				model::Purchase purchase = controller::search_purchase(kind, id);
-				std::cout << purchase;
+				std::vector<model::Purchase> purchases = controller::search_purchase(kind, id);
+				for (std::vector<model::Purchase>::iterator iter = purchases.begin();
+				iter != purchases.end(); ++iter)
+					std::cout << *iter;
 			}
 			break;
 			default:
@@ -189,19 +253,65 @@ namespace shopping
 
 	void menu_insert()
 	{
-		SubMenu sub_menu = sub_prompt(Menu::SEARCH);
-		std::string kind, id;
+		SubMenu sub_menu = sub_prompt(Menu::INSERT);
+		std::string reg_info;
 
-		if (!prompt_id(sub_menu, kind, id))
+		if (!prompt_reg(sub_menu, reg_info))
 			return;
+
+		std::istringstream ss(reg_info);
 
 		switch (sub_menu)
 		{
 		case SubMenu::MEMBER:
+		{
+			model::Member member;
+			ss >> member;
+			try {
+				controller::search_member(member.id());
+			}
+			catch (std::exception ex) {
+				std::cout << "Duplicate!" << std::endl;
+				return;
+			}
+			controller::insert_data(member);
+		}
 			break;
 		case SubMenu::STOCK:
+		{
+			model::Stock stock;
+			ss >> stock;
+			try {
+				controller::search_stock(stock.id());
+			}
+			catch (std::exception ex) {
+				std::cout << "Duplicate!" << std::endl;
+				return;
+			}
+			controller::insert_data(stock);
+		}
 			break;
 		case SubMenu::PURCHASE:
+		{
+			model::Purchase purchase;
+			ss >> purchase;
+			try {
+				controller::search_purchase(ModelKind::PURCHASE, purchase.id());
+			}
+			catch (std::exception ex) {
+				std::cout << "Duplicate!" << std::endl;
+				return;
+			}
+			try {
+				controller::search_member(purchase.member_id());
+				controller::search_stock(purchase.stock_id());
+			}
+			catch (std::exception ex) {
+				std::cout << "Foreign Key ERROR!" << std::endl;
+				return;
+			}
+			controller::insert_data(purchase);
+		}
 			break;
 		default:
 			return;
@@ -210,43 +320,150 @@ namespace shopping
 
 	void menu_delete()
 	{
-		SubMenu sub_menu = sub_prompt(Menu::SEARCH);
-		std::string kind, id;
+		SubMenu sub_menu = sub_prompt(Menu::DELETE);
+		ModelKind kind;
+		std::string id;
 
 		if (!prompt_id(sub_menu, kind, id))
 			return;
 
-		switch (sub_menu)
-		{
-		case SubMenu::MEMBER:
+		try {
+			switch (sub_menu)
+			{
+			case SubMenu::MEMBER:
+			{
+				model::Member member = controller::search_member(id);
+				try {
+					std::vector<model::Purchase> purchases = controller::search_purchase(ModelKind::MEMBER, id);
+					for (std::vector<model::Purchase>::iterator iter = purchases.begin();
+					iter != purchases.end(); ++iter) {
+						std::cout << "DELETE PURCHASE : " << *iter << std::endl;
+						controller::delete_data(*iter);
+					}
+				}
+				catch (std::exception ex) {
+					// pass
+				}
+				controller::delete_data(member);
+				std::cout << member;
+			}
 			break;
-		case SubMenu::STOCK:
+			case SubMenu::STOCK:
+			{
+				model::Stock stock = controller::search_stock(id);
+				try {
+					std::vector<model::Purchase> purchases = controller::search_purchase(ModelKind::STOCK, id);
+					for (std::vector<model::Purchase>::iterator iter = purchases.begin();
+					iter != purchases.end(); ++iter) {
+						std::cout << "DELETE PURCHASE : " << *iter << std::endl;
+						controller::delete_data(*iter);
+					}
+				}
+				catch (std::exception ex) {
+					// pass
+				}
+				controller::delete_data(stock);
+				std::cout << stock;
+			}
 			break;
-		case SubMenu::PURCHASE:
+			case SubMenu::PURCHASE:
+			{
+				std::vector<model::Purchase> purchases = controller::search_purchase(kind, id);
+				controller::delete_data(purchases[0]);
+				std::cout << purchases[0];
+			}
 			break;
-		default:
-			return;
+			default:
+				return;
+			}
+		}
+		catch (std::exception ex) {
+			std::cout << "Invalid ID!!!" << std::endl;
 		}
 	}
 
 	void menu_update()
 	{
-		SubMenu sub_menu = sub_prompt(Menu::SEARCH);
-		std::string kind, id;
-
-		if (!prompt_id(sub_menu, kind, id))
-			return;
-
-		switch (sub_menu)
+		std::string id, pk;
+		SubMenu sub_menu = sub_prompt(Menu::UPDATE);
 		{
-		case SubMenu::MEMBER:
+			ModelKind kind;
+
+			if (!prompt_id(sub_menu, kind, id))
+				return;
+
+			try {
+				switch (sub_menu)
+				{
+				case SubMenu::MEMBER:
+				{
+					model::Member member = controller::search_member(id);
+					controller::delete_data(member);
+					std::cout << member;
+					pk = member.id();
+				}
+				break;
+				case SubMenu::STOCK:
+				{
+					model::Stock stock = controller::search_stock(id);
+					controller::delete_data(stock);
+					std::cout << stock;
+					pk = stock.id();
+				}
+				break;
+				case SubMenu::PURCHASE:
+				{
+					std::vector<model::Purchase> purchases = controller::search_purchase(kind, id);
+					controller::delete_data(purchases[0]);
+					std::cout << purchases[0];
+					pk = purchases[0].id();
+				}
+				break;
+				default:
+					return;
+				}
+			}
+			catch (std::exception ex) {
+				std::cout << "Invalid ID!!!" << std::endl;
+				return;
+			}
+		}
+		{
+			std::string reg_info;
+
+			if (!prompt_reg(sub_menu, reg_info, true))
+				return;
+
+			reg_info = pk + '|' + reg_info;
+
+			std::istringstream ss(reg_info);
+
+			switch (sub_menu)
+			{
+			case SubMenu::MEMBER:
+			{
+				model::Member member;
+				ss >> member;
+				controller::insert_data(member);
+			}
 			break;
-		case SubMenu::STOCK:
+			case SubMenu::STOCK:
+			{
+				model::Stock stock;
+				ss >> stock;
+				controller::insert_data(stock);
+			}
 			break;
-		case SubMenu::PURCHASE:
+			case SubMenu::PURCHASE:
+			{
+				model::Purchase purchase;
+				ss >> purchase;
+				controller::insert_data(purchase);
+			}
 			break;
-		default:
-			return;
+			default:
+				return;
+			}
 		}
 	}
 }

@@ -45,6 +45,9 @@ namespace iobuffer
 		int Write(int recaddr = -1); // write the current buffer contents
 		int Append(); // write the current buffer at the end of file
 
+		int Delete(int recaddr);
+
+
 		// Access to IOBuffer
 		IOBuffer & GetBuffer();
 

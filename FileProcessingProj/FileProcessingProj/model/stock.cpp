@@ -28,7 +28,8 @@ namespace model {
 	Stock::Stock(const Stock& s)
 		: m_id(s.m_id), m_category(s.m_category), m_material(s.m_material),
 		m_price(s.m_price), m_stock(s.m_stock), m_washing_info(s.m_washing_info),
-		m_size(s.m_size)
+		m_size(s.m_size),
+		recaddr(s.recaddr)
 	{
 	}
 
@@ -41,13 +42,18 @@ namespace model {
 		this->m_stock = s.m_stock;
 		this->m_washing_info = s.m_washing_info;
 		this->m_size = s.m_size;
-
+		this->recaddr = s.recaddr;
 		return *this;
 	}
 
 	bool Stock::operator==(const Stock& s) const
 	{
 		return m_id == s.m_id;
+	}
+
+	bool Stock::operator==(const std::string& id) const
+	{
+		return m_id == id;
 	}
 
 	bool Stock::operator!=(const Stock& s) const
@@ -87,7 +93,7 @@ namespace model {
 		if (line.empty())
 		{
 			// something is wrong!
-			return is;
+			throw std::exception("Invalid input.");
 		}
 
 		std::vector<std::string> tokens = helper::tokenize_string(line, '|');
@@ -95,7 +101,7 @@ namespace model {
 		if (tokens.size() != STOCK_FIELD_NUM)
 		{
 			// something is wrong!
-			return is;
+			throw std::exception("Invalid input.");
 		}
 
 		s.m_id = tokens[0];

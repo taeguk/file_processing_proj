@@ -4,6 +4,7 @@
 #include <string>
 #include <algorithm>
 #include <cassert>
+#include <vector>
 #include <model/model.h>
 #include <iobuffer/delim.h>
 #include <iobuffer/recfile.h>
@@ -103,7 +104,12 @@ namespace file {
 		for (std::vector<DataType>::iterator iter = data_list.begin();
 		iter != data_list.end(); ++iter)
 		{
-			ifs >> *iter;
+			try {
+				ifs >> *iter;
+			}
+			catch (std::exception ex) {
+				std::cout << ex.what() << std::endl;
+			}
 		}
 
 		return data_list;
@@ -155,6 +161,7 @@ namespace file {
 			if ((read_addr = recode_file.Read(data_list[i])) == -1)
 				// may means eof?
 				break;
+			data_list[i].recaddr = read_addr;
 		}
 
 		recode_file.Close();

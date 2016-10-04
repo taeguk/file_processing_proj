@@ -27,7 +27,8 @@ namespace model {
 
 	Purchase::Purchase(const Purchase& p)
 		: m_id(p.m_id), m_stock_id(p.m_stock_id),
-		m_member_id(p.m_member_id), m_quantity(p.m_quantity)
+		m_member_id(p.m_member_id), m_quantity(p.m_quantity),
+		recaddr(p.recaddr)
 	{
 	}
 
@@ -37,13 +38,19 @@ namespace model {
 		this->m_stock_id = p.m_stock_id;
 		this->m_member_id = p.m_member_id;
 		this->m_quantity = p.m_quantity;
+		this->recaddr = p.recaddr;
 
 		return *this;
 	}
 
 	bool Purchase::operator==(const Purchase& p) const
 	{
-		return this->m_id == p.m_id;
+		return m_id == p.m_id;
+	}
+
+	bool Purchase::operator==(const std::string& id) const
+	{
+		return m_id == id;
 	}
 
 	bool Purchase::operator!=(const Purchase& p) const
@@ -63,7 +70,7 @@ namespace model {
 		if (line.empty())
 		{
 			// something is wrong!
-			return is;
+			throw std::exception("Invalid input.");
 		}
 
 		std::vector<std::string> tokens = helper::tokenize_string(line, '|');
@@ -71,7 +78,7 @@ namespace model {
 		if (tokens.size() != PURCHASE_FIELD_NUM)
 		{
 			// something is wrong!
-			return is;
+			throw std::exception("Invalid input.");
 		}
 
 		p.m_id = tokens[0];

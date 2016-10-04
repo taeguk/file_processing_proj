@@ -26,7 +26,8 @@ namespace model {
 
 	Member::Member(const Member& m)
 		: m_id(m.m_id), m_name(m.m_name), m_phone_number(m.m_phone_number),
-		m_address(m.m_address), m_birthday(m.m_birthday), m_email(m.m_email)
+		m_address(m.m_address), m_birthday(m.m_birthday), m_email(m.m_email),
+		recaddr(m.recaddr)
 	{
 	}
 
@@ -38,12 +39,18 @@ namespace model {
 		this->m_address = m.m_address;
 		this->m_birthday = m.m_birthday;
 		this->m_email = m.m_email;
+		this->recaddr = m.recaddr;
 		return *this;
 	}
 
 	bool Member::operator==(const Member& m) const
 	{
-		return this->m_id == m.m_id;
+		return m_id == m.m_id;
+	}
+
+	bool Member::operator==(const std::string& id) const
+	{
+		return m_id == id;
 	}
 
 	bool Member::operator!=(const Member& m) const
@@ -63,7 +70,7 @@ namespace model {
 		if (line.empty())
 		{
 			// something is wrong!
-			return is;
+			throw std::exception("Invalid input.");
 		}
 
 		std::vector<std::string> tokens = helper::tokenize_string(line, '|');
@@ -71,7 +78,7 @@ namespace model {
 		if (tokens.size() != MEMBER_FIELD_NUM)
 		{
 			// something is wrong!
-			return is;
+			throw std::exception("Invalid input.");
 		}
 
 		m.m_id = tokens[0];

@@ -30,6 +30,7 @@ namespace model {
 		Member(const Member&);
 		Member& operator=(const Member&);
 		bool operator==(const Member&) const;
+		bool operator==(const std::string& id) const;
 		bool operator!=(const Member&) const;
 
 		inline std::string id() const;
@@ -46,6 +47,8 @@ namespace model {
 		int Pack(iobuffer::IOBuffer&) const;
 		int Unpack(iobuffer::IOBuffer&);
 
+	public:
+		int recaddr;
 	private:
 		std::string m_id;
 		std::string m_name;

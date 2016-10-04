@@ -90,6 +90,15 @@ namespace iobuffer
 		return Buffer.Write(File);
 	}
 
+
+	int BufferFile::Delete(int recaddr)
+	{
+		File.seekp(recaddr+2, ios::beg);
+		Buffer.Pack("*");
+		return Buffer.Write(File);
+	}
+
+
 	// Access to IOBuffer
 	IOBuffer & BufferFile::GetBuffer()
 	{

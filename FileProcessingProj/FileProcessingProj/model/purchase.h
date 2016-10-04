@@ -30,6 +30,7 @@ namespace model {
 		Purchase(const Purchase&);
 		Purchase& operator=(const Purchase&);
 		bool operator==(const Purchase&) const;
+		bool operator==(const std::string& id) const;
 		bool operator!=(const Purchase&) const;
 
 		inline std::string id() const;
@@ -44,6 +45,8 @@ namespace model {
 		int Pack(iobuffer::IOBuffer&) const;
 		int Unpack(iobuffer::IOBuffer&);
 
+	public:
+		int recaddr;
 	private:
 		std::string m_id;
 		std::string m_stock_id;

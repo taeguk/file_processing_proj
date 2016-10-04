@@ -35,6 +35,7 @@ namespace model {
 		Stock(const Stock&);
 		Stock& operator=(const Stock&);
 		bool operator==(const Stock&) const;
+		bool operator==(const std::string& id) const;
 		bool operator!=(const Stock&) const;
 
 		inline std::string id() const;
@@ -53,6 +54,8 @@ namespace model {
 		int Pack(iobuffer::IOBuffer&) const;
 		int Unpack(iobuffer::IOBuffer&);
 
+	public:
+		int recaddr;
 	private:
 		std::string m_id;
 		std::string m_category;
