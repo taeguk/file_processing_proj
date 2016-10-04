@@ -63,6 +63,12 @@
     <ClInclude Include="model\stock.h">
       <Filter>헤더 파일\model</Filter>
     </ClInclude>
+    <ClInclude Include="shopping.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="controller.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -94,6 +100,12 @@
     </ClCompile>
     <ClCompile Include="model\stock.cpp">
       <Filter>소스 파일\model</Filter>
+    </ClCompile>
+    <ClCompile Include="shopping.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="controller.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
