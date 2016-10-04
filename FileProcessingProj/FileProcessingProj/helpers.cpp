@@ -43,3 +43,15 @@ namespace helper
 		return tokens;
 	}
 }
+
+void clear_console()
+{
+#ifdef _WIN32
+	system("cls");
+#elif defined __unix__
+	system("clear");
+#else
+	// Print some new lines instead of clearing console.
+	std::cout << std::endl << std::endl << std::endl << std::endl;
+#endif
+}

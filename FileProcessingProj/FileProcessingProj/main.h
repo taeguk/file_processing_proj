@@ -20,7 +20,6 @@ void show_list_file(int count = -1)
 	}
 }
 
-void clear_console();
 void show_menu();
 void prompt();
 

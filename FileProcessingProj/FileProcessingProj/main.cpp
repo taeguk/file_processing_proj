@@ -1,5 +1,6 @@
 #include <cstdlib>
 #include <main.h>
+#include <helpers.h>
 
 int main() 
 {
@@ -22,18 +23,6 @@ int main()
 #else
 	std::cout << 'Nothing to do...' << std::endl;
 
-#endif
-}
-
-void clear_console()
-{
-#ifdef _WIN32
-	system("cls");
-#elif defined __unix__
-	system("clear");
-#else
-	// Print some new lines instead of clearing console.
-	std::cout << std::endl << std::endl << std::endl << std::endl;
 #endif
 }
 
@@ -101,7 +90,7 @@ void prompt()
 		std::cout << "If you wanna continue, please press 'ENTER'...";
 		std::cin.get();
 
-		clear_console();
+		helper::clear_console();
 	}
 }
 

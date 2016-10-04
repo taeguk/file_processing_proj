@@ -28,8 +28,8 @@ namespace helper {
 	}
 
 	int to_int(std::string str, const char* skip = "");
-
 	std::vector<std::string> tokenize_string(std::string str, char denim);
+	void clear_console();
 }
 
 #endif
