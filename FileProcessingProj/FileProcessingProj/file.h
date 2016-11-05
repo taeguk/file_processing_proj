@@ -4,7 +4,8 @@
 #include <string>
 #include <algorithm>
 #include <cassert>
-#include <vector>
+#include <list>
+#include <type_traits>
 #include <model/model.h>
 #include <iobuffer/delim.h>
 #include <iobuffer/recfile.h>
@@ -48,18 +49,13 @@ namespace file {
 	template <class DataType>
 	std::string get_list_file_name()
 	{
-		/////// Invalid DataType!!
-		assert(false);
+		if (std::is_same<DataType, model::Member>::value)
+			return MEMBER_LIST_FILE_NAME;
+		else if (std::is_same<DataType, model::Stock>::value)
+			return STOCK_LIST_FILE_NAME;
+		else if (std::is_same<DataType, model::Purchase>::value)
+			return PURCHASE_LIST_FILE_NAME;
 	}
-
-	template <>
-	std::string get_list_file_name<model::Member>();
-
-	template <>
-	std::string get_list_file_name<model::Stock>();
-
-	template <>
-	std::string get_list_file_name<model::Purchase>();
 
 
 	/*
@@ -68,25 +64,20 @@ namespace file {
 	template <class DataType>
 	std::string get_data_file_name()
 	{
-		/////// Invalid DataType!!
-		assert(false);
+		if (std::is_same<DataType, model::Member>::value)
+			return MEMBER_DATA_FILE_NAME;
+		else if (std::is_same<DataType, model::Stock>::value)
+			return STOCK_DATA_FILE_NAME;
+		else if (std::is_same<DataType, model::Purchase>::value)
+			return PURCHASE_DATA_FILE_NAME;
 	}
-
-	template <>
-	std::string get_data_file_name<model::Member>();
-
-	template <>
-	std::string get_data_file_name<model::Stock>();
-
-	template <>
-	std::string get_data_file_name<model::Purchase>();
 
 
 	/*
 		특정 모델 타입에 해당하는 리스트 파일을 읽어주는 함수 템플릿
 	*/
 	template <class DataType>
-	std::vector<DataType> read_list_file(int count = -1)
+	std::list<DataType> read_list_file(int count = -1)
 	{
 		std::ifstream ifs;
 		int data_cnt;
@@ -99,10 +90,9 @@ namespace file {
 		else
 			count = std::min(count, data_cnt);
 
-		std::vector<DataType> data_list(count);
+		std::list<DataType> data_list(count);
 
-		for (std::vector<DataType>::iterator iter = data_list.begin();
-		iter != data_list.end(); ++iter)
+		for (auto iter = begin(data_list); iter != end(data_list); ++iter)
 		{
 			try {
 				ifs >> *iter;
@@ -120,7 +110,7 @@ namespace file {
 		특정 모델 타입에 해당하는 데이터들을 해당하는 데이터 파일에 써주는 함수 템플릿
 	*/
 	template <class DataType>
-	void write_data_file(const std::vector<DataType>& data_list)
+	void write_data_file(const std::list<DataType>& data_list)
 	{
 		iobuffer::DelimFieldBuffer buffer('|', iobuffer::MAX_IOBUFFER_SIZE);
 		iobuffer::RecordFile<DataType> recode_file(buffer);
@@ -128,8 +118,7 @@ namespace file {
 		recode_file.Create(get_data_file_name<DataType>().c_str(),
 			std::ios::out | std::ios::trunc);
 
-		for (std::vector<DataType>::const_iterator iter = data_list.begin();
-		iter != data_list.end(); ++iter)
+		for (auto iter = cbegin(data_list); iter != cend(data_list); ++iter)
 		{
 			int recaddr;
 			if ((recaddr = recode_file.Write(*iter)) == -1) {
@@ -145,23 +134,23 @@ namespace file {
 		특정 모델 타입에 해당하는 데이터 파일을 읽어주는 함수 템플릿
 	*/
 	template <class DataType>
-	std::vector<DataType> read_data_file(int count = -1)
+	std::list<DataType> read_data_file(int count = -1)
 	{
 		iobuffer::DelimFieldBuffer buffer('|', iobuffer::MAX_IOBUFFER_SIZE);
 		iobuffer::RecordFile<DataType> recode_file(buffer);
-		std::vector<DataType> data_list;
+		std::list<DataType> data_list;
 
 		recode_file.Open(get_data_file_name<DataType>().c_str(),
 			std::ios::in);
 
 		for (int i = 0; count == -1 || i < count; ++i)
 		{
-			data_list.push_back(DataType());
+			data_list.emplace_back();
 			int read_addr;
-			if ((read_addr = recode_file.Read(data_list[i])) == -1)
+			if ((read_addr = recode_file.Read(data_list.back())) == -1)
 				// may means eof?
 				break;
-			data_list[i].recaddr = read_addr;
+			data_list.back().recaddr = read_addr;
 		}
 
 		recode_file.Close();

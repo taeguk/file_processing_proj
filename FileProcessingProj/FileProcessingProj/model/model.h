@@ -8,7 +8,7 @@
 */
 
 
-#include <vector>
+#include <list>
 #include <model/member.h>
 #include <model/stock.h>
 #include <model/purchase.h>
@@ -36,12 +36,12 @@ namespace model {
 		{
 		}
 
-		ModelManager(const std::vector<ModelType>& data_list)
+		ModelManager(const std::list<ModelType>& data_list)
 			: m_data_list(data_list)
 		{
 		}
 
-		const std::vector<ModelType>& const_data_list() const
+		const auto& const_data_list() const
 		{
 			return m_data_list;
 		}
@@ -74,7 +74,7 @@ namespace model {
 		*/
 
 	private:
-		std::vector<ModelType> m_data_list;
+		std::list<ModelType> m_data_list;
 	};
 }
 

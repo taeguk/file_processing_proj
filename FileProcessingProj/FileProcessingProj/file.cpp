@@ -236,49 +236,4 @@ namespace file
 		return purchases;
 	}
 
-
-	/*
-		모델 타입으로 부터 리스트 파일 이름을 가져오는 함수 템플릿의 특수화 버전
-	*/
-
-	template <>
-	std::string get_list_file_name<model::Member>()
-	{
-		return MEMBER_LIST_FILE_NAME;
-	}
-
-	template <>
-	std::string get_list_file_name<model::Stock>()
-	{
-		return STOCK_LIST_FILE_NAME;
-	}
-
-	template <>
-	std::string get_list_file_name<model::Purchase>()
-	{
-		return PURCHASE_LIST_FILE_NAME;
-	}
-
-
-	/*
-		모델 타입으로 부터 데이터 파일 이름을 가져오는 함수 템플릿의 특수화 버전
-	*/
-
-	template <>
-	std::string get_data_file_name<model::Member>()
-	{
-		return MEMBER_DATA_FILE_NAME;
-	}
-
-	template <>
-	std::string get_data_file_name<model::Stock>()
-	{
-		return STOCK_DATA_FILE_NAME;
-	}
-
-	template <>
-	std::string get_data_file_name<model::Purchase>()
-	{
-		return PURCHASE_DATA_FILE_NAME;
-	}
 }

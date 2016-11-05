@@ -116,39 +116,30 @@ void show_purchase()
 
 void member_test()
 {
-	std::vector<model::Member> members = file::read_list_file<model::Member>();
+	auto members = file::read_list_file<model::Member>();
 	file::write_data_file(members);
-	std::vector<model::Member> members_for_test = file::read_data_file<model::Member>(10);
+	auto members_for_test = file::read_data_file<model::Member>(10);
 	
-	for (std::vector<model::Member>::iterator iter = members_for_test.begin();
-	iter != members_for_test.end(); ++iter)
-	{
+	for (auto iter = begin(members_for_test); iter != end(members_for_test); ++iter)
 		std::cout << *iter;
-	}
 }
 
 void stock_test()
 {
-	std::vector<model::Stock> stocks = file::read_list_file<model::Stock>();
+	auto stocks = file::read_list_file<model::Stock>();
 	file::write_data_file(stocks);
-	std::vector<model::Stock> stocks_for_test = file::read_data_file<model::Stock>(10);
+	auto stocks_for_test = file::read_data_file<model::Stock>(10);
 
-	for (std::vector<model::Stock>::iterator iter = stocks_for_test.begin();
-	iter != stocks_for_test.end(); ++iter)
-	{
+	for (auto iter = begin(stocks_for_test); iter != end(stocks_for_test); ++iter)
 		std::cout << *iter;
-	}
 }
 
 void purchase_test()
 {
-	std::vector<model::Purchase> purchases = file::read_list_file<model::Purchase>();
+	auto purchases = file::read_list_file<model::Purchase>();
 	file::write_data_file(purchases);
-	std::vector<model::Purchase> purchases_for_test = file::read_data_file<model::Purchase>(10);
+	auto purchases_for_test = file::read_data_file<model::Purchase>(10);
 
-	for (std::vector<model::Purchase>::iterator iter = purchases_for_test.begin();
-	iter != purchases_for_test.end(); ++iter)
-	{
+	for (auto iter = begin(purchases_for_test); iter != end(purchases_for_test); ++iter)
 		std::cout << *iter;
-	}
 }

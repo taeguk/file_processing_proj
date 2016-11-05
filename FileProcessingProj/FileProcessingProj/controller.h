@@ -17,20 +17,80 @@ namespace controller {
 		model::ModelKind kind, std::string id);
 
 
-	model::Member search_member_with_id(const std::vector<model::Member>& members,
-		std::string id);
-	model::Stock search_stock_with_id(const std::vector<model::Stock>& stocks,
-		std::string id);
+	/*
+		Searching in Containers.
+	*/
 
-	std::vector<model::Purchase> search_purchase(const std::vector<model::Purchase>& purchases,
-		model::ModelKind kind, std::string id);
-	model::Purchase search_purchase_with_id(const std::vector<model::Purchase>& purchases,
-		std::string id);
-	std::vector<model::Purchase> search_purchase_with_member_id(const std::vector<model::Purchase>& purchases,
-		std::string member_id);
-	std::vector<model::Purchase> search_purchase_with_stock_id(const std::vector<model::Purchase>& purchases,
-		std::string stock_id);
+	template <class Container>
+	auto search_data_with_id(const Container& data_container, std::string id)
+	{
+		auto iter = std::find(cbegin(data_container), cend(data_container), id);
 
+		if (iter == cend(data_container))
+			throw std::exception("Can't find data with given id.");
+
+		return *iter;
+	}
+
+	template <class Container>
+	std::vector<model::Purchase> search_purchase(const Container& purchases,
+		ModelKind kind, std::string id)
+	{
+		switch (kind)
+		{
+		case ModelKind::MEMBER:
+			return search_purchase_with_member_id(purchases, id);
+		case ModelKind::STOCK:
+			return search_purchase_with_stock_id(purchases, id);
+		case ModelKind::PURCHASE:
+		{
+			std::vector<model::Purchase> v;
+			v.emplace_back(search_data_with_id(purchases, id));
+			return v;
+		}
+		default:
+			throw std::exception("Invalid model kind.");
+		}
+	}
+
+	template <class Container>
+	std::vector<model::Purchase> search_purchase_with_member_id(const Container& purchases,
+		std::string member_id)
+	{
+		std::vector<model::Purchase> v;
+
+		for (auto iter = cbegin(purchases); iter != cend(purchases); ++iter)
+		{
+			if (iter->member_id() == member_id)
+				v.emplace_back(*iter);
+		}
+
+		if (v.empty())
+			throw std::exception("Can't find data with given id.");
+
+		return v;
+	}
+
+	template <class Container>
+	std::vector<model::Purchase> search_purchase_with_stock_id(const Container& purchases,
+		std::string stock_id)
+	{
+		std::vector<model::Purchase> v;
+
+		for (auto iter = cbegin(purchases); iter != cend(purchases); ++iter)
+		{
+			if (iter->stock_id() == stock_id)
+				v.emplace_back(*iter);
+		}
+
+		if (v.empty())
+			throw std::exception("Can't find data with given id.");
+
+		return v;
+	}
+
+
+	/* Insert, Delete, Update to FILE. */
 
 	template <class DataType>
 	void insert_data(const DataType& data)
