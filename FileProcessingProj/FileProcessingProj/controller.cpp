@@ -6,34 +6,28 @@
 namespace controller
 {
 	using model::ModelKind;
+	using model::ModelManager;
+	using model::Member;
+	using model::Stock;
+	using model::Purchase;
 
-	template <class ModelType>
-	bool find_given_id(ModelType data, std::string id)
+
+	Member search_member(const ModelManager<Member> &manager, std::string id)
 	{
-		return data.id() == id;
+		return search_member_with_id(manager.const_data_list(), id);
 	}
 
-	model::Member search_member(std::string id)
+	Stock search_stock(const ModelManager<Stock> &manager, std::string id)
 	{
-		std::vector<model::Member> members = file::read_data_file<model::Member>();
-
-		return search_member_with_id(members, id);
+		return search_stock_with_id(manager.const_data_list(), id);
 	}
 
-	model::Stock search_stock(std::string id)
+	std::vector<Purchase> search_purchase(const ModelManager<Purchase> &manager,
+		ModelKind kind, std::string id)
 	{
-		std::vector<model::Stock> stocks = file::read_data_file<model::Stock>();
-
-		return search_stock_with_id(stocks, id);
+		return search_purchase(manager.const_data_list(), kind, id);
 	}
 
-	std::vector<model::Purchase> search_purchase(ModelKind kind, std::string id)
-	{
-		std::vector<model::Purchase> purchases = file::read_data_file<model::Purchase>();
-
-		return search_purchase(purchases, kind, id);
-	}
-	
 
 	/*
 		Searching in Containers.
@@ -42,10 +36,9 @@ namespace controller
 	model::Member search_member_with_id(const std::vector<model::Member>& members,
 		std::string id)
 	{
-		std::vector<model::Member>::const_iterator iter =
-			std::find(members.begin(), members.end(), id);
+		auto iter = std::find(cbegin(members), cend(members), id);
 
-		if (iter == members.end())
+		if (iter == cend(members))
 			throw std::exception("Can't find data with given id.");
 
 		return *iter;
@@ -54,10 +47,9 @@ namespace controller
 	model::Stock search_stock_with_id(const std::vector<model::Stock>& stocks,
 		std::string id)
 	{
-		std::vector<model::Stock>::const_iterator iter =
-			std::find(stocks.begin(), stocks.end(), id);
+		auto iter = std::find(cbegin(stocks), cend(stocks), id);
 
-		if (iter == stocks.end())
+		if (iter == cend(stocks))
 			throw std::exception("Can't find data with given id.");
 
 		return *iter;
@@ -86,10 +78,9 @@ namespace controller
 	model::Purchase search_purchase_with_id(const std::vector<model::Purchase>& purchases,
 		std::string id)
 	{
-		std::vector<model::Purchase>::const_iterator iter =
-			std::find(purchases.begin(), purchases.end(), id);
+		auto iter = std::find(cbegin(purchases), cend(purchases), id);
 
-		if (iter == purchases.end())
+		if (iter == cend(purchases))
 			throw std::exception("Can't find data with given id.");
 
 		return *iter;
@@ -100,8 +91,7 @@ namespace controller
 	{
 		std::vector<model::Purchase> v;
 
-		for (std::vector<model::Purchase>::const_iterator iter = purchases.begin();
-		iter != purchases.end(); ++iter)
+		for (auto iter = cbegin(purchases); iter != cend(purchases); ++iter)
 		{
 			if (iter->member_id() == member_id)
 				v.push_back(*iter);
@@ -118,8 +108,7 @@ namespace controller
 	{
 		std::vector<model::Purchase> v;
 
-		for (std::vector<model::Purchase>::const_iterator iter = purchases.begin();
-		iter != purchases.end(); ++iter)
+		for (auto iter = cbegin(purchases); iter != cend(purchases); ++iter)
 		{
 			if (iter->stock_id() == stock_id)
 				v.push_back(*iter);

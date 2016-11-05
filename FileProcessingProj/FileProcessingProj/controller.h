@@ -1,5 +1,5 @@
-#ifndef __CONTROLLER_H__
-#define __CONTROLLER_H__
+#ifndef CONTROLLER_H
+#define CONTROLLER_H
 
 #include <vector>
 #include <model/model.h>
@@ -9,11 +9,12 @@
 /*
 	데이터 모델들을 다루고 처리하는데 관련된 것들이 모여있는 namespace
 */
-namespace controller
-{
-	model::Member search_member(std::string id);
-	model::Stock search_stock(std::string id);
-	std::vector<model::Purchase> search_purchase(model::ModelKind kind, std::string id);
+namespace controller {
+
+	model::Member search_member(const model::ModelManager<model::Member>& manager, std::string id);
+	model::Stock search_stock(const model::ModelManager<model::Stock>& manager, std::string id);
+	std::vector<model::Purchase> search_purchase(const model::ModelManager<model::Purchase>& manager,
+		model::ModelKind kind, std::string id);
 
 
 	model::Member search_member_with_id(const std::vector<model::Member>& members,
@@ -36,7 +37,6 @@ namespace controller
 	{
 		iobuffer::DelimFieldBuffer buffer('|', iobuffer::MAX_IOBUFFER_SIZE);
 		iobuffer::RecordFile<DataType> recode_file(buffer);
-		std::vector<DataType> data_list;
 
 		recode_file.Open(file::get_data_file_name<DataType>().c_str(),
 			std::ios::out);
@@ -50,7 +50,6 @@ namespace controller
 	{
 		iobuffer::DelimFieldBuffer buffer('|', iobuffer::MAX_IOBUFFER_SIZE);
 		iobuffer::RecordFile<DataType> recode_file(buffer);
-		std::vector<DataType> data_list;
 
 		recode_file.Open(file::get_data_file_name<DataType>().c_str(),
 			std::ios::out);

@@ -1,5 +1,5 @@
-#ifndef MODEL_H
-#define MODEL_H
+#ifndef PURCHASE_H
+#define PURCHASE_H
 
 
 #include <string>

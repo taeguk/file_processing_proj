@@ -1,5 +1,5 @@
-#ifndef __STOCK_H__
-#define __STOCK_H__
+#ifndef STOCK_H
+#define STOCK_H
 
 
 #include <string>

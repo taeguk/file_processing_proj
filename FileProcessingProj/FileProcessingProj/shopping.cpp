@@ -10,12 +10,12 @@ namespace shopping
 	using model::ModelKind;
 
 
-	void online_shopping_system()
+	void OnlineShoppingSystem::run()
 	{
 		prompt();
 	}
 
-	void show_menu()
+	void OnlineShoppingSystem::show_menu()
 	{
 		std::cout << "====================================" << std::endl;
 		std::cout << "       Online Shopping System       " << std::endl;
@@ -29,7 +29,7 @@ namespace shopping
 		std::cout << "====================================" << std::endl;
 	}
 
-	void prompt()
+	void OnlineShoppingSystem::prompt()
 	{
 		bool exit_flag = false;
 
@@ -43,7 +43,7 @@ namespace shopping
 			std::cin >> sel;
 			std::cin.get();		// for '\n'
 
-			switch (sel)
+			switch (static_cast<Menu>(sel))
 			{
 			case Menu::SEARCH:
 				menu_search();
@@ -72,7 +72,7 @@ namespace shopping
 		}
 	}
 
-	SubMenu sub_prompt(Menu menu)
+	SubMenu OnlineShoppingSystem::sub_prompt(Menu menu)
 	{
 		helper::clear_console();
 
@@ -110,7 +110,7 @@ namespace shopping
 		std::cin >> sel;
 		std::cin.get();		// for '\n'
 
-		switch (sel)
+		switch (static_cast<SubMenu>(sel))
 		{
 		case SubMenu::MEMBER:
 		case SubMenu::STOCK:
@@ -123,7 +123,7 @@ namespace shopping
 		}
 	}
 
-	bool prompt_id(SubMenu sub_menu, ModelKind& kind, std::string& id, bool is_search)
+	bool OnlineShoppingSystem::prompt_id(SubMenu sub_menu, ModelKind& kind, std::string& id, bool is_search)
 	{
 		std::string str_kind;
 
@@ -170,7 +170,7 @@ namespace shopping
 		return true;
 	}
 
-	bool prompt_reg(SubMenu sub_menu, std::string& reg_info, bool is_update)
+	bool OnlineShoppingSystem::prompt_reg(SubMenu sub_menu, std::string& reg_info, bool is_update)
 	{
 		switch (sub_menu)
 		{
@@ -205,12 +205,14 @@ namespace shopping
 			return false;
 		}
 
-		std::cin >> reg_info;
-		std::cin.get();
+		char info_buf[1024];
+
+		std::cin.getline(info_buf, 1024);
+		reg_info = info_buf;
 		return true;
 	}
 
-	void menu_search()
+	void OnlineShoppingSystem::menu_search()
 	{
 		SubMenu sub_menu = sub_prompt(Menu::SEARCH);
 		ModelKind kind;
@@ -224,21 +226,21 @@ namespace shopping
 			{
 			case SubMenu::MEMBER:
 			{
-				model::Member member = controller::search_member(id);
+				auto member = controller::search_member(m_member_manager, id);
 				std::cout << member;
 			}
 			break;
 			case SubMenu::STOCK:
 			{
-				model::Stock stock = controller::search_stock(id);
+				auto stock = controller::search_stock(m_stock_manager, id);
 				std::cout << stock;
 			}
 			break;
 			case SubMenu::PURCHASE:
 			{
-				std::vector<model::Purchase> purchases = controller::search_purchase(kind, id);
-				for (std::vector<model::Purchase>::iterator iter = purchases.begin();
-				iter != purchases.end(); ++iter)
+				auto purchases = 
+					controller::search_purchase(m_purchase_manager, kind, id);
+				for (auto iter = cbegin(purchases); iter != cend(purchases); ++iter)
 					std::cout << *iter;
 			}
 			break;
@@ -251,7 +253,7 @@ namespace shopping
 		}
 	}
 
-	void menu_insert()
+	void OnlineShoppingSystem::menu_insert()
 	{
 		SubMenu sub_menu = sub_prompt(Menu::INSERT);
 		std::string reg_info;
@@ -268,13 +270,15 @@ namespace shopping
 			model::Member member;
 			ss >> member;
 			try {
-				controller::search_member(member.id());
-			}
-			catch (std::exception ex) {
+				controller::search_member(m_member_manager, member.id());
+
 				std::cout << "Duplicate!" << std::endl;
 				return;
 			}
-			controller::insert_data(member);
+			catch (std::exception ex) {
+				controller::insert_data(member);
+				m_member_manager.add(std::move(member));
+			}
 		}
 			break;
 		case SubMenu::STOCK:
@@ -282,13 +286,15 @@ namespace shopping
 			model::Stock stock;
 			ss >> stock;
 			try {
-				controller::search_stock(stock.id());
-			}
-			catch (std::exception ex) {
+				controller::search_stock(m_stock_manager, stock.id());
+
 				std::cout << "Duplicate!" << std::endl;
 				return;
 			}
-			controller::insert_data(stock);
+			catch (std::exception ex) {
+				controller::insert_data(stock);
+				m_stock_manager.add(std::move(stock));
+			}
 		}
 			break;
 		case SubMenu::PURCHASE:
@@ -296,21 +302,31 @@ namespace shopping
 			model::Purchase purchase;
 			ss >> purchase;
 			try {
-				controller::search_purchase(ModelKind::PURCHASE, purchase.id());
-			}
-			catch (std::exception ex) {
+				controller::search_purchase(m_purchase_manager, ModelKind::PURCHASE, purchase.id());
+
 				std::cout << "Duplicate!" << std::endl;
 				return;
 			}
-			try {
-				controller::search_member(purchase.member_id());
-				controller::search_stock(purchase.stock_id());
-			}
 			catch (std::exception ex) {
-				std::cout << "Foreign Key ERROR!" << std::endl;
+			}
+			try {
+				controller::search_member(m_member_manager, purchase.member_id());
+
+				std::cout << "Foreign Key (member_id) ERROR!" << std::endl;
 				return;
 			}
-			controller::insert_data(purchase);
+			catch (std::exception ex) {
+				try {
+					controller::search_stock(m_stock_manager, purchase.stock_id());
+
+					std::cout << "Foreign Key (stock_id) ERROR!" << std::endl;
+					return;
+				}
+				catch (std::exception ex) {
+					controller::insert_data(purchase);
+					m_purchase_manager.add(std::move(purchase));
+				}
+			}
 		}
 			break;
 		default:
@@ -318,7 +334,7 @@ namespace shopping
 		}
 	}
 
-	void menu_delete()
+	void OnlineShoppingSystem::menu_delete()
 	{
 		SubMenu sub_menu = sub_prompt(Menu::DELETE);
 		ModelKind kind;
@@ -332,44 +348,52 @@ namespace shopping
 			{
 			case SubMenu::MEMBER:
 			{
-				model::Member member = controller::search_member(id);
+				auto member = controller::search_member(m_member_manager, id);
 				try {
-					std::vector<model::Purchase> purchases = controller::search_purchase(ModelKind::MEMBER, id);
-					for (std::vector<model::Purchase>::iterator iter = purchases.begin();
-					iter != purchases.end(); ++iter) {
+					auto purchases = 
+						controller::search_purchase(m_purchase_manager, ModelKind::MEMBER, id);
+
+					for (auto iter = cbegin(purchases); iter != cend(purchases); ++iter) {
 						std::cout << "DELETE PURCHASE : " << *iter << std::endl;
 						controller::delete_data(*iter);
+						m_purchase_manager.del(*iter);
 					}
 				}
 				catch (std::exception ex) {
 					// pass
 				}
+				/// TODO: 이런 식으로 del관련 코드가 2줄씩 되어있는거 하나로 함수합치는거 고려해보기.
 				controller::delete_data(member);
+				m_member_manager.del(member);
 				std::cout << member;
 			}
 			break;
 			case SubMenu::STOCK:
 			{
-				model::Stock stock = controller::search_stock(id);
+				auto stock = controller::search_stock(m_stock_manager, id);
 				try {
-					std::vector<model::Purchase> purchases = controller::search_purchase(ModelKind::STOCK, id);
-					for (std::vector<model::Purchase>::iterator iter = purchases.begin();
-					iter != purchases.end(); ++iter) {
+					auto purchases = 
+						controller::search_purchase(m_purchase_manager, ModelKind::STOCK, id);
+
+					for (auto iter = cbegin(purchases); iter != cend(purchases); ++iter) {
 						std::cout << "DELETE PURCHASE : " << *iter << std::endl;
 						controller::delete_data(*iter);
+						m_purchase_manager.del(*iter);
 					}
 				}
 				catch (std::exception ex) {
 					// pass
 				}
 				controller::delete_data(stock);
+				m_stock_manager.del(stock);
 				std::cout << stock;
 			}
 			break;
 			case SubMenu::PURCHASE:
 			{
-				std::vector<model::Purchase> purchases = controller::search_purchase(kind, id);
+				auto purchases = controller::search_purchase(m_purchase_manager, kind, id);
 				controller::delete_data(purchases[0]);
+				m_purchase_manager.del(purchases[0]);
 				std::cout << purchases[0];
 			}
 			break;
@@ -382,7 +406,7 @@ namespace shopping
 		}
 	}
 
-	void menu_update()
+	void OnlineShoppingSystem::menu_update()
 	{
 		std::string id, pk;
 		SubMenu sub_menu = sub_prompt(Menu::UPDATE);
@@ -397,7 +421,7 @@ namespace shopping
 				{
 				case SubMenu::MEMBER:
 				{
-					model::Member member = controller::search_member(id);
+					auto member = controller::search_member(m_member_manager, id);
 					controller::delete_data(member);
 					std::cout << member;
 					pk = member.id();
@@ -405,7 +429,7 @@ namespace shopping
 				break;
 				case SubMenu::STOCK:
 				{
-					model::Stock stock = controller::search_stock(id);
+					auto stock = controller::search_stock(m_stock_manager, id);
 					controller::delete_data(stock);
 					std::cout << stock;
 					pk = stock.id();
@@ -413,7 +437,7 @@ namespace shopping
 				break;
 				case SubMenu::PURCHASE:
 				{
-					std::vector<model::Purchase> purchases = controller::search_purchase(kind, id);
+					auto purchases = controller::search_purchase(m_purchase_manager, kind, id);
 					controller::delete_data(purchases[0]);
 					std::cout << purchases[0];
 					pk = purchases[0].id();

@@ -1,5 +1,5 @@
-#ifndef __MEMBER_H__
-#define __MEMBER_H__
+#ifndef MEMBER_H
+#define MEMBER_H
 
 
 #include <string>

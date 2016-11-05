@@ -1,10 +1,10 @@
-#ifndef __MODEL_H__
-#define __MODEL_H__
+#ifndef MODEL_H
+#define MODEL_H
 
 /*
 	이 헤더파일은 model namespace내의 모든 header file들을 
 	include하는 목적으로서 사용될 수 있습니다.
-	ModelManager도 있음.
+	+) ModelManager도 있음.
 */
 
 
@@ -12,37 +12,72 @@
 #include <model/member.h>
 #include <model/stock.h>
 #include <model/purchase.h>
+#include <file.h>
 
 
-namespace model
-{
+namespace model {
+
 	/*
 		Data Model에 관련된 것들을 담고 있는 네임스페이스
 	*/
 
-	enum ModelKind 
+	enum class ModelKind 
 	{
 		MEMBER, STOCK, PURCHASE, INVALID
 	};
 
-	/*
-	template <class ModelType>
+	
+	template <typename ModelType>
 	class ModelManager
 	{
 	public:
 		ModelManager()
+			: m_data_list(file::read_data_file<ModelType>())
 		{
 		}
-		ModelManager(const std::vector<ModelType> data_list)
-			m_data_list(data_list)
+
+		ModelManager(const std::vector<ModelType>& data_list)
+			: m_data_list(data_list)
 		{
 		}
+
+		const std::vector<ModelType>& const_data_list() const
+		{
+			return m_data_list;
+		}
+
+		void add(const ModelType &data)
+		{
+			m_data_list.emplace_back(data);
+		}
+
+		void del(const ModelType &data)
+		{
+			auto iter = std::find_if(begin(m_data_list), end(m_data_list), 
+				[&data](const auto& el) {
+				return el.id() == data.id();
+			});
+			if (iter == end(m_data_list))
+			{
+				// exception handling.
+				std::cout << "EXCEPTION in ModelManager::del()." << std::endl;
+				return;
+			}
+			m_data_list.erase(iter);
+		}
+		
+		/*
+		inline const auto& operator const std::vector<ModelType>& () const
+		{
+			return m_data_list;
+		}
+		*/
 
 	private:
 		std::vector<ModelType> m_data_list;
 	};
-	*/
 }
 
+using model::ModelKind;
 
 #endif

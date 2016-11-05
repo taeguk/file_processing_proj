@@ -79,7 +79,10 @@ void prompt()
 			purchase_test();
 			break;
 		case 7:
-			shopping::online_shopping_system();
+		{
+			shopping::OnlineShoppingSystem oss;
+			oss.run();
+		}
 			break;
 		case 8:
 			exit_flag = true;
