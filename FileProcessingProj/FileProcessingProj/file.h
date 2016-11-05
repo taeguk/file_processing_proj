@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <cassert>
 #include <list>
+#include <utility>
 #include <type_traits>
 #include <model/model.h>
 #include <iobuffer/delim.h>
@@ -134,28 +135,50 @@ namespace file {
 		특정 모델 타입에 해당하는 데이터 파일을 읽어주는 함수 템플릿
 	*/
 	template <class DataType>
-	std::list<DataType> read_data_file(int count = -1)
+	std::pair<std::list<DataType>, std::list<std::pair<int, int>> > 
+		read_data_file(int count = -1)
 	{
 		iobuffer::DelimFieldBuffer buffer('|', iobuffer::MAX_IOBUFFER_SIZE);
 		iobuffer::RecordFile<DataType> recode_file(buffer);
 		std::list<DataType> data_list;
+		std::list<std::pair<int,int>> empty_block_list;
+		
+		bool empty_block_flag = false;
+		int empty_block_addr;
 
 		recode_file.Open(get_data_file_name<DataType>().c_str(),
 			std::ios::in);
 
 		for (int i = 0; count == -1 || i < count; ++i)
 		{
-			data_list.emplace_back();
+			if(!empty_block_flag) data_list.emplace_back();
 			int read_addr;
 			if ((read_addr = recode_file.Read(data_list.back())) == -1)
 				// may means eof?
 				break;
-			data_list.back().recaddr = read_addr;
+			if (read_addr >= 0) 
+			{
+				if (empty_block_flag)  // end of empty block
+				{
+					int empty_block_size = read_addr - empty_block_addr;
+					empty_block_list.emplace_back(empty_block_addr, empty_block_size);
+				}
+				data_list.back().recaddr = read_addr;
+				empty_block_flag = false;
+			}
+			else  // empty block
+			{
+				if (!empty_block_flag)  // start of empty block
+				{
+					empty_block_flag = true;
+					empty_block_addr = -read_addr - 2;
+				}
+			}
 		}
 
 		recode_file.Close();
 
-		return data_list;
+		return std::make_pair(data_list, empty_block_list);
 	}
 }
 

@@ -16,6 +16,7 @@
 namespace iobuffer
 {
 
+	// Specified to "VariableLengthBuffer".
 	class BufferFile
 		// Class to represent buffered file operations
 		// 	Used in conjunction with the IOBuffer classes 

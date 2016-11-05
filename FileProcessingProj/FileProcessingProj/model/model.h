@@ -9,6 +9,8 @@
 
 
 #include <list>
+#include <tuple>
+#include <utility>
 #include <model/member.h>
 #include <model/stock.h>
 #include <model/purchase.h>
@@ -32,8 +34,15 @@ namespace model {
 	{
 	public:
 		ModelManager()
-			: m_data_list(file::read_data_file<ModelType>())
 		{
+			std::tie(m_data_list, m_empty_block_list) = file::read_data_file<ModelType>();
+
+			std::cout << "-------- Empty Block List Of " << typeid(ModelType).name() << " --------" << std::endl;
+			for (auto iter = cbegin(m_empty_block_list); iter != cend(m_empty_block_list); ++iter)
+			{
+				std::cout << "Empty Block Address = " << iter->first << ", Size = " << iter->second << "." << std::endl;
+			}
+			std::cin.get();
 		}
 
 		ModelManager(const std::list<ModelType>& data_list)
@@ -75,6 +84,7 @@ namespace model {
 
 	private:
 		std::list<ModelType> m_data_list;
+		std::list<std::pair<int, int>> m_empty_block_list;
 	};
 }
 

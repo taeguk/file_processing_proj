@@ -29,26 +29,24 @@ namespace iobuffer
 		// write the number of bytes in the buffer field definitions
 		// the record length is represented by an unsigned short value
 	{
-		bool skip = true;
 		int recaddr;
-		while (skip)
-		{
-			if (stream.eof()) return -1;
-			recaddr = (int)stream.tellg();
-			Clear();
-			unsigned short bufferSize;
-			stream.read((char *)&bufferSize, sizeof(bufferSize));
-			if (!stream.good()) { stream.clear(); return -1; }
-			BufferSize = bufferSize;
-			if (BufferSize > MaxBytes) return -1; // buffer overflow
-			stream.read(Buffer, BufferSize);
-			if (!stream.good()) { stream.clear(); return -1; }
+
+		if (stream.eof()) return -1;
+		recaddr = (int)stream.tellg();
+		Clear();
+		unsigned short bufferSize;
+		stream.read((char *)&bufferSize, sizeof(bufferSize));
+		if (!stream.good()) { stream.clear(); return -1; }
+		BufferSize = bufferSize;
+		if (BufferSize > MaxBytes) return -1; // buffer overflow
+		stream.read(Buffer, BufferSize);
+		if (!stream.good()) { stream.clear(); return -1; }
 			
-			// Check for deleted file.
-			if (Buffer[2] != '*')
-				skip = false;
-		}
-		return recaddr;
+		// Deleted data.
+		if (Buffer[2] == '*')
+			return -2-recaddr;
+		else
+			return recaddr;
 	}
 
 

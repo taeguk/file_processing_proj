@@ -29,8 +29,11 @@ namespace iobuffer
 		int readAddr, result;
 		readAddr = BufferFile::Read(recaddr);
 		if (readAddr == -1) return -1;
-		result = record.Unpack(Buffer);
-		if (!result) return -1;
+		if (readAddr >= 0)
+		{
+			result = record.Unpack(Buffer);
+			if (!result) return -1;
+		}
 		return readAddr;
 	}
 
