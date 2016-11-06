@@ -10,6 +10,7 @@
 #include <model/model.h>
 #include <iobuffer/delim.h>
 #include <iobuffer/recfile.h>
+#include <experimental/filesystem>
 
 
 /*
@@ -160,7 +161,7 @@ namespace file {
 			{
 				if (empty_block_flag)  // end of empty block
 				{
-					int empty_block_size = read_addr - empty_block_addr;
+					int empty_block_size = read_addr - empty_block_addr - 2; // -2 for record_size.
 					empty_block_list.emplace_back(empty_block_addr, empty_block_size);
 				}
 				data_list.back().recaddr = read_addr;
@@ -177,6 +178,12 @@ namespace file {
 		}
 
 		recode_file.Close();
+
+		// truncate file size.
+		if (empty_block_flag) {
+			namespace fs = std::experimental::filesystem;
+			fs::resize_file(get_data_file_name<DataType>(), empty_block_addr);
+		}
 
 		return std::make_pair(data_list, empty_block_list);
 	}

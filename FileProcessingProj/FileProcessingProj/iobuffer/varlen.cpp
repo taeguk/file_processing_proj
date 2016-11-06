@@ -43,7 +43,7 @@ namespace iobuffer
 		if (!stream.good()) { stream.clear(); return -1; }
 			
 		// Deleted data.
-		if (Buffer[2] == '*')
+		if (Buffer[0] == '*')
 			return -2-recaddr;
 		else
 			return recaddr;
@@ -61,6 +61,18 @@ namespace iobuffer
 		stream.write(Buffer, BufferSize);
 		if (!stream.good()) return -1;
 		return recaddr;
+	}
+
+	void VariableLengthBuffer::Delete(std::ostream & stream) const
+	{
+		stream.seekp(2, ios::cur);
+		stream.write("*", 1);
+	}
+
+	void VariableLengthBuffer::Reserve(std::ostream & stream, unsigned short record_size) const
+	{
+		stream.write((char *)&record_size, sizeof(record_size));
+		stream.write("*", 1);
 	}
 
 	const char * headerStr = "Variable";

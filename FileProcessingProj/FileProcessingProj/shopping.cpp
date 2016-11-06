@@ -226,20 +226,20 @@ namespace shopping
 			{
 			case SubMenu::MEMBER:
 			{
-				auto member = controller::search_member(m_member_manager, id);
+				auto member = model::search_member(m_member_manager, id);
 				std::cout << member;
 			}
 			break;
 			case SubMenu::STOCK:
 			{
-				auto stock = controller::search_stock(m_stock_manager, id);
+				auto stock = model::search_stock(m_stock_manager, id);
 				std::cout << stock;
 			}
 			break;
 			case SubMenu::PURCHASE:
 			{
 				auto purchases = 
-					controller::search_purchase(m_purchase_manager, kind, id);
+					model::search_purchase(m_purchase_manager, kind, id);
 				for (auto iter = cbegin(purchases); iter != cend(purchases); ++iter)
 					std::cout << *iter;
 			}
@@ -270,14 +270,13 @@ namespace shopping
 			model::Member member;
 			ss >> member;
 			try {
-				controller::search_member(m_member_manager, member.id());
+				model::search_member(m_member_manager, member.id());
 
 				std::cout << "Duplicate!" << std::endl;
 				return;
 			}
 			catch (std::exception ex) {
-				controller::insert_data(member);
-				m_member_manager.add(std::move(member));
+				m_member_manager.add(member);
 			}
 		}
 			break;
@@ -286,14 +285,13 @@ namespace shopping
 			model::Stock stock;
 			ss >> stock;
 			try {
-				controller::search_stock(m_stock_manager, stock.id());
+				model::search_stock(m_stock_manager, stock.id());
 
 				std::cout << "Duplicate!" << std::endl;
 				return;
 			}
 			catch (std::exception ex) {
-				controller::insert_data(stock);
-				m_stock_manager.add(std::move(stock));
+				m_stock_manager.add(stock);
 			}
 		}
 			break;
@@ -302,7 +300,7 @@ namespace shopping
 			model::Purchase purchase;
 			ss >> purchase;
 			try {
-				controller::search_purchase(m_purchase_manager, ModelKind::PURCHASE, purchase.id());
+				model::search_purchase(m_purchase_manager, ModelKind::PURCHASE, purchase.id());
 
 				std::cout << "Duplicate!" << std::endl;
 				return;
@@ -310,21 +308,20 @@ namespace shopping
 			catch (std::exception ex) {
 			}
 			try {
-				controller::search_member(m_member_manager, purchase.member_id());
+				model::search_member(m_member_manager, purchase.member_id());
 
 				std::cout << "Foreign Key (member_id) ERROR!" << std::endl;
 				return;
 			}
 			catch (std::exception ex) {
 				try {
-					controller::search_stock(m_stock_manager, purchase.stock_id());
+					model::search_stock(m_stock_manager, purchase.stock_id());
 
 					std::cout << "Foreign Key (stock_id) ERROR!" << std::endl;
 					return;
 				}
 				catch (std::exception ex) {
-					controller::insert_data(purchase);
-					m_purchase_manager.add(std::move(purchase));
+					m_purchase_manager.add(purchase);
 				}
 			}
 		}
@@ -348,10 +345,10 @@ namespace shopping
 			{
 			case SubMenu::MEMBER:
 			{
-				auto member = controller::search_member(m_member_manager, id);
+				auto member = model::search_member(m_member_manager, id);
 				try {
 					auto purchases = 
-						controller::search_purchase(m_purchase_manager, ModelKind::MEMBER, id);
+						model::search_purchase(m_purchase_manager, ModelKind::MEMBER, id);
 
 					for (auto iter = cbegin(purchases); iter != cend(purchases); ++iter) {
 						std::cout << "DELETE PURCHASE : " << *iter << std::endl;
@@ -370,10 +367,10 @@ namespace shopping
 			break;
 			case SubMenu::STOCK:
 			{
-				auto stock = controller::search_stock(m_stock_manager, id);
+				auto stock = model::search_stock(m_stock_manager, id);
 				try {
 					auto purchases = 
-						controller::search_purchase(m_purchase_manager, ModelKind::STOCK, id);
+						model::search_purchase(m_purchase_manager, ModelKind::STOCK, id);
 
 					for (auto iter = cbegin(purchases); iter != cend(purchases); ++iter) {
 						std::cout << "DELETE PURCHASE : " << *iter << std::endl;
@@ -384,15 +381,13 @@ namespace shopping
 				catch (std::exception ex) {
 					// pass
 				}
-				controller::delete_data(stock);
 				m_stock_manager.del(stock);
 				std::cout << stock;
 			}
 			break;
 			case SubMenu::PURCHASE:
 			{
-				auto purchases = controller::search_purchase(m_purchase_manager, kind, id);
-				controller::delete_data(purchases[0]);
+				auto purchases = model::search_purchase(m_purchase_manager, kind, id);
 				m_purchase_manager.del(purchases[0]);
 				std::cout << purchases[0];
 			}
@@ -421,24 +416,24 @@ namespace shopping
 				{
 				case SubMenu::MEMBER:
 				{
-					auto member = controller::search_member(m_member_manager, id);
-					controller::delete_data(member);
+					auto member = model::search_member(m_member_manager, id);
+					m_member_manager.del(member);
 					std::cout << member;
 					pk = member.id();
 				}
 				break;
 				case SubMenu::STOCK:
 				{
-					auto stock = controller::search_stock(m_stock_manager, id);
-					controller::delete_data(stock);
+					auto stock = model::search_stock(m_stock_manager, id);
+					m_stock_manager.del(stock);
 					std::cout << stock;
 					pk = stock.id();
 				}
 				break;
 				case SubMenu::PURCHASE:
 				{
-					auto purchases = controller::search_purchase(m_purchase_manager, kind, id);
-					controller::delete_data(purchases[0]);
+					auto purchases = model::search_purchase(m_purchase_manager, kind, id);
+					m_purchase_manager.del(purchases[0]);
 					std::cout << purchases[0];
 					pk = purchases[0].id();
 				}
@@ -468,21 +463,21 @@ namespace shopping
 			{
 				model::Member member;
 				ss >> member;
-				controller::insert_data(member);
+				m_member_manager.add(member);
 			}
 			break;
 			case SubMenu::STOCK:
 			{
 				model::Stock stock;
 				ss >> stock;
-				controller::insert_data(stock);
+				m_stock_manager.add(stock);
 			}
 			break;
 			case SubMenu::PURCHASE:
 			{
 				model::Purchase purchase;
 				ss >> purchase;
-				controller::insert_data(purchase);
+				m_purchase_manager.add(purchase);
 			}
 			break;
 			default:

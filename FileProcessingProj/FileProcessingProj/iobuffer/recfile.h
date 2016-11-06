@@ -18,7 +18,7 @@ namespace iobuffer
 	public:
 		int Read(RecType & record, int recaddr = -1);
 		int Write(const RecType & record, int recaddr = -1);
-		int Append(const RecType & record, int recaddr = -1);
+		int Append(const RecType & record);
 		RecordFile(IOBuffer & buffer) : BufferFile(buffer) {}
 	};
 
@@ -47,7 +47,7 @@ namespace iobuffer
 	}
 
 	template <class RecType>
-	int RecordFile<RecType>::Append(const RecType & record, int recaddr = -1)
+	int RecordFile<RecType>::Append(const RecType & record)
 	{
 		int result;
 		result = record.Pack(Buffer);

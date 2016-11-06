@@ -47,6 +47,7 @@ namespace iobuffer
 		int Append(); // write the current buffer at the end of file
 
 		int Delete(int recaddr);
+		int Reserve(int recaddr, unsigned short record_size);
 
 
 		// Access to IOBuffer

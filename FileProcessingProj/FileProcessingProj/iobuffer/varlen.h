@@ -28,8 +28,10 @@ namespace iobuffer
 		int PackDelimeted(void *, int);
 		int PackLength(void *, int);
 		void Print(std::ostream &) const;
-		int SizeOfBuffer() const; // return current size of buffer
 		int Init();
+
+		void Delete(std::ostream &) const;
+		void Reserve(std::ostream &, unsigned short) const;
 	protected:
 	};
 

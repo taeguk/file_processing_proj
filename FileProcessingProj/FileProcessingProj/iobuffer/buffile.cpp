@@ -93,9 +93,16 @@ namespace iobuffer
 
 	int BufferFile::Delete(int recaddr)
 	{
-		File.seekp(recaddr+2, ios::beg);
-		Buffer.Pack("*");
-		return Buffer.Write(File);
+		File.seekp(recaddr, ios::beg);
+		Buffer.Delete(File);
+		return recaddr;
+	}
+
+	int BufferFile::Reserve(int recaddr, unsigned short record_size)
+	{
+		File.seekp(recaddr, ios::beg);
+		Buffer.Reserve(File, record_size);
+		return recaddr;
 	}
 
 

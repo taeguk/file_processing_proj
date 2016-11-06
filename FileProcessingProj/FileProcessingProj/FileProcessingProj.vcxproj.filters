@@ -48,9 +48,6 @@
     <ClInclude Include="iobuffer\recfile.h">
       <Filter>헤더 파일\iobuffer</Filter>
     </ClInclude>
-    <ClInclude Include="iobuffer\varlen.h">
-      <Filter>헤더 파일\iobuffer</Filter>
-    </ClInclude>
     <ClInclude Include="model\member.h">
       <Filter>헤더 파일\model</Filter>
     </ClInclude>
@@ -68,6 +65,9 @@
     </ClInclude>
     <ClInclude Include="controller.h">
       <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="iobuffer\varlen.h">
+      <Filter>헤더 파일\iobuffer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -104,8 +104,8 @@
     <ClCompile Include="shopping.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="controller.cpp">
-      <Filter>소스 파일</Filter>
+    <ClCompile Include="model.cpp">
+      <Filter>소스 파일\model</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

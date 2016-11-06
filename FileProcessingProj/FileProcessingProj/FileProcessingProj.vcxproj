@@ -144,7 +144,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="controller.cpp" />
     <ClCompile Include="file.cpp" />
     <ClCompile Include="helpers.cpp" />
     <ClCompile Include="iobuffer\buffile.cpp" />
@@ -152,6 +151,7 @@
     <ClCompile Include="iobuffer\iobuffer.cpp" />
     <ClCompile Include="iobuffer\varlen.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="model.cpp" />
     <ClCompile Include="model\member.cpp" />
     <ClCompile Include="model\purchase.cpp" />
     <ClCompile Include="model\stock.cpp" />

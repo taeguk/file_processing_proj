@@ -2,7 +2,10 @@
 #define CONTROLLER_H
 
 #include <vector>
-#include <model/model.h>
+#include <memory>
+#include <model/member.h>
+#include <model/stock.h>
+#include <model/purchase.h>
 #include <file.h>
 
 
@@ -10,12 +13,6 @@
 	데이터 모델들을 다루고 처리하는데 관련된 것들이 모여있는 namespace
 */
 namespace controller {
-
-	model::Member search_member(const model::ModelManager<model::Member>& manager, std::string id);
-	model::Stock search_stock(const model::ModelManager<model::Stock>& manager, std::string id);
-	std::vector<model::Purchase> search_purchase(const model::ModelManager<model::Purchase>& manager,
-		model::ModelKind kind, std::string id);
-
 
 	/*
 		Searching in Containers.
@@ -30,27 +27,6 @@ namespace controller {
 			throw std::exception("Can't find data with given id.");
 
 		return *iter;
-	}
-
-	template <class Container>
-	std::vector<model::Purchase> search_purchase(const Container& purchases,
-		ModelKind kind, std::string id)
-	{
-		switch (kind)
-		{
-		case ModelKind::MEMBER:
-			return search_purchase_with_member_id(purchases, id);
-		case ModelKind::STOCK:
-			return search_purchase_with_stock_id(purchases, id);
-		case ModelKind::PURCHASE:
-		{
-			std::vector<model::Purchase> v;
-			v.emplace_back(search_data_with_id(purchases, id));
-			return v;
-		}
-		default:
-			throw std::exception("Invalid model kind.");
-		}
 	}
 
 	template <class Container>
@@ -92,8 +68,9 @@ namespace controller {
 
 	/* Insert, Delete, Update to FILE. */
 
+	/*
 	template <class DataType>
-	void insert_data(const DataType& data)
+	void insert_data(const DataType& data, int recaddr = -1)
 	{
 		iobuffer::DelimFieldBuffer buffer('|', iobuffer::MAX_IOBUFFER_SIZE);
 		iobuffer::RecordFile<DataType> recode_file(buffer);
@@ -101,8 +78,35 @@ namespace controller {
 		recode_file.Open(file::get_data_file_name<DataType>().c_str(),
 			std::ios::out);
 
-		recode_file.Append(data);
+		if (recaddr == -1)
+			recode_file.Append(data);
+		else
+			recode_file.Write(data, recaddr);
 		recode_file.Close();
+	}
+	*/
+
+	template <class DataType>
+	void insert_data(iobuffer::IOBuffer& buffer, int recaddr = -1)
+	{
+		iobuffer::BufferFile buffer_file(buffer);
+
+		buffer_file.Open(file::get_data_file_name<DataType>().c_str(),
+			std::ios::out);
+
+		if (recaddr == -1)
+			buffer_file.Append();
+		else
+			buffer_file.Write(recaddr);
+		buffer_file.Close();
+	}
+
+	template <class DataType>
+	std::shared_ptr<iobuffer::IOBuffer> make_buffer_from_data(const DataType& data)
+	{
+		auto p_buffer = std::make_shared<iobuffer::DelimFieldBuffer>('|', iobuffer::MAX_IOBUFFER_SIZE);
+		data.Pack(*p_buffer);
+		return p_buffer;
 	}
 
 	template <class DataType>
@@ -116,13 +120,6 @@ namespace controller {
 
 		recode_file.Delete(data.recaddr);
 		recode_file.Close();
-	}
-
-	template <class DataType>
-	void update_data(const DataType& prev_data, const DataType& after_data)
-	{
-		delele_data(prev_data);
-		insert_data(after_data);
 	}
 }
 

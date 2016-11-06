@@ -44,6 +44,11 @@ namespace iobuffer
 		virtual int ReadHeader(std::istream &); // write a buffer to the stream
 		virtual int WriteHeader(std::ostream &) const; // write a buffer to the stream
 
+		inline int SizeOfBuffer() const; // return current size of buffer
+
+		virtual void Delete(std::ostream &) const = 0;
+		virtual void Reserve(std::ostream &, unsigned short) const = 0;
+
 	protected:
 		int Initialized; // TRUE if buffer is initialized
 		char * Buffer; // character array to hold field values
@@ -52,6 +57,11 @@ namespace iobuffer
 		int NextByte; // index of next byte to be packed/unpacked
 		int Packing; // TRUE if in packing mode, FALSE, if unpacking
 	};
+
+	inline int IOBuffer::SizeOfBuffer() const
+	{
+		return BufferSize;
+	}
 
 	// field packing operations
 	// pack a field into a buffer
